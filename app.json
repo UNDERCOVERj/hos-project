@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/outpatient/outpatient",
+    "pages/inhospital/inhospital",
+    
+    "pages/result/result",
+    "pages/history/history"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "五四一医院缴费助手",
+    "navigationBarTextStyle": "black"
+  },
+  "debug": true
+}

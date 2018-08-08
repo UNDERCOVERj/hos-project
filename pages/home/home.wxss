@@ -1,0 +1,114 @@
+/* pages/home/home.wxss */
+
+.modal-wrapper {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color:  rgba(0,0,0,.65);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    width: 200px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.modal .header {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.modal .content {
+  padding: 30px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal .footer {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.home {
+    height: 100%;
+}
+
+.home-notice {
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fef5cc;
+    color: #ffaa01;
+}
+
+.home-notice-icon {
+    width: 20px;
+    height: 20px;
+    margin: 0 10px;
+}
+
+.home-notice-content {
+    width: calc(100vw - 40px);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.home-notice-text {
+    position: absolute;
+    overflow: hidden;
+}
+
+.home-user {
+    height: 130rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-avatar {
+    width: 83rpx;
+    height: 83rpx;
+    border-radius: 50%;
+    margin-right: 20rpx;
+}
+
+.home-body, .home-bg {
+    height: calc(100vh - 300rpx);
+    width: 100%;
+}
+
+.home-body {
+    position: relative;
+}
+
+.home-scan {
+    position: absolute;
+    z-index: 100;
+    height: 250rpx;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 50rpx;
+}
+
+
+
+.home-button {
+    height: 100rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2e82ff;
+    color: #fff;
+}

@@ -1,0 +1,126 @@
+/* pages/outpatient/outpatient.wxss */
+.outpatient {
+	width: 100%;
+	min-height: 100%;
+	box-sizing: border-box;
+	padding: 280rpx 0 100rpx 0;
+	overflow: hidden;
+	position: relative;
+	background-color: #fafafa;
+}
+
+.inhospital-bg {
+	width: 100%;
+	height: 200rpx;
+	position: absolute;
+	top: 0;
+}
+
+.card {
+	width: calc(100vw - 60rpx);
+	box-shadow: 2px 2px 3px #f5f5f5;
+	border-radius: 10rpx;
+	z-index: 100;
+	background-color: #fff;
+}
+
+.patient {
+	height: 160rpx;
+	position: absolute;
+	top: 90rpx;
+	transform: translateX(-50%);
+	left: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.patient-block { 
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.patient-highlight {
+	color: #3082ff;
+	font-size: 36rpx;
+	height: 50rpx;
+	line-height: 50rpx;
+}
+
+.patient-plain {
+	color: #999999
+}
+
+/*包括单据号的表单卡*/
+
+.outpatient-content {
+	margin: 0 30rpx 30rpx;
+}
+
+.list-title {
+	height: 80rpx;
+	display: flex;
+	padding: 0 30rpx;
+	box-sizing: border-box;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 24rpx;
+	border-bottom: 1px solid #fafafa;
+}
+
+.list-title label {
+	padding: 0;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: center;
+}
+
+.list-title checkbox {
+	transform: scale(.8);
+}
+
+.list-title-time {
+	color: #999999;
+	max-width: 60%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	word-wrap: break-word;
+	word-break: break-all;
+}
+
+/*table的内容移至组件中*/
+
+
+/*支付栏和总额栏*/
+.pay-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #fff;
+	position: fixed;
+	width: 100%;
+	bottom: 0;
+	border-top: 1px solid #fafafa;
+}
+
+.pay-footer-num {
+	padding-left: 30rpx;
+}
+
+.pay-footer-num text {
+	color: #ff6d00;
+}
+
+.pay-footer-btn {
+	height: 100rpx;
+	width: 200rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	background-color: #2e82ff;
+}

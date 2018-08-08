@@ -1,0 +1,132 @@
+<!--pages/history/history.wxml-->
+<template name="empty">
+	<view class="empty">
+		<image src="../../assets/no_bill.png"/>
+		<text>暂无账单</text>
+	</view>	
+</template>
+
+<view class="history">
+	<view class="history-nav">
+		<view 
+			class="history-nav-item" 
+			wx:for="{{navs}}" 
+			wx:key="{{nav.type}}" 
+			wx:for-item="nav" 
+			style="color: {{nav.type == type ? '#2e82ff' : '#666666'}}; border-bottom: {{nav.type == type ? '2px solid #2e82ff' : 'none'}}" 
+			bindtap="switchToHistory" 
+			data-type="{{nav.type}}">
+			{{nav.title}}
+		</view>
+	</view>
+	<!-- 门诊账单 -->
+	<block wx:if="{{type===1}}">
+		<template is="empty"  wx:if="{{outpatientBills && outpatientBills.length === 0}}"/>
+		<view class="card" wx:for="{{outpatientBills}}" wx:for-index="cardidx" wx:for-item="card" wx:key="{{card.billId}}">
+			<view class="list">
+				<view class="list-title">
+					<view class="list-title-label">
+						<image src="../../assets/outpatient_icon.png" />
+						<text>门诊号{{card.outpatientId}}</text>
+					</view>
+					<view class="list-title-billId">
+						单据号: {{card.billId}}
+					</view>
+				</view>
+				<component-table type="outpatientBills" card="{{card}}" cardidx="{{cardidx}}" bindcustumevent="unfoldTable"></component-table>
+			</view>	
+		</view>
+	</block>
+	<!-- 住院押金 -->
+	<block wx:if="{{type===2}}">
+		<template is="empty"  wx:if="{{inhospitalDeposit && inhospitalDeposit.length === 0}}"/>
+		<view class="card" wx:for="{{inhospitalDeposit}}" wx:for-item="info" wx:key="{{info.inhospitalId}}">
+			<view class="card-info-tr">
+				<view class="card-info-key">住院号</view>
+				<view class="card-info-value">{{info.inhospitalId}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">姓名</view>
+				<view class="card-info-value">{{info.name}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">订单号</view>
+				<view class="card-info-value">{{info.orderId}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">缴费金额</view>
+				<view class="card-info-value">{{info.expense}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">缴费时间</view>
+				<view class="card-info-value">{{info.time}}</view>
+			</view>
+
+		</view>
+	</block>
+	<!-- 住院费用清单 -->
+	<block wx:if="{{type===3}}">
+		<template is="empty"  wx:if="{{inhospitalBills && inhospitalBills.length === 0}}"/>
+		<view class="inhospitalBills" wx:for="{{inhospitalBills}}" wx:for-index="idx" wx:for-item="item" wx:key="{{idx}}">
+			<view class="card">
+				<view class="card-info-tr">
+					<view class="card-info-key">住院号</view>
+					<view class="card-info-value">{{item.inhospitalId}} <text>第3次</text></view>
+				</view>
+				<view class="card-info-tr">
+					<view class="card-info-key">姓名</view>
+					<view class="card-info-value">{{item.name}}</view>
+				</view>
+				<view class="card-info-tr">
+					<view class="card-info-key">住院日期</view>
+					<view class="card-info-value">{{item.date}}</view>
+				</view>
+				<view class="card-info-tr">
+					<view class="card-info-key">费用合计</view>
+					<view class="card-info-value">{{item.totalExpense}}</view>
+				</view>
+			</view>
+			<view class="card">
+				<view class="list">
+					<view class="list-title">
+						<view class="list-title-label">
+							<text>查看日期</text>
+						</view>
+						<view class="list-title-billId" data-curPickerView="{{idx}}" bindtap="showModal">
+							单据号:124
+						</view>
+					</view>
+					<component-table type="inhospitalBills" card="{{item.card}}" cardidx="{{idx}}" bindcustumevent="unfoldTable"></component-table>
+				</view>	
+			</view>			
+		</view>
+	</block>
+	<!-- 日期选择picker-view -->
+	<view class="modal-wrapper" wx:if="{{!pickerViewHiddenFlag}}">
+	    <view class="modal">
+	        <view class="header">
+	            <text>选择查看日期</text>
+	        </view>
+	        <view class="content">
+				<picker-view indicator-style="height: 50px;" class="picker-view" value="{{pickerViewValue}}" bindchange="bindChange">
+					<picker-view-column>
+						<view wx:for="{{years}}" class="picker-view-column">{{item}}年</view>
+					</picker-view-column>
+					<picker-view-column>
+						<view wx:for="{{months}}" class="picker-view-column">{{item}}月</view>
+					</picker-view-column>
+					<picker-view-column>
+						<view wx:for="{{days}}" class="picker-view-column">{{item}}日</view>
+					</picker-view-column>
+					<picker-view-column>
+						<view wx:for="{{prices}}" wx:for-index="priceidx" class="picker-view-column picker-view-column-highlight">￥{{item}}</view>
+					</picker-view-column>		
+				</picker-view>
+	        </view>
+	        <view class="footer">
+	        	<view class="footer-btn-cancel" bindtap="cancelModal">取消</view>
+	        	<view class="footer-btn-confirm" bindtap="confirmModal">确认</view>
+	        </view>
+	    </view>
+	</view>
+</view>

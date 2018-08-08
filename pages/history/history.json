@@ -1,0 +1,6 @@
+{
+	"usingComponents": {
+		"component-table": "../table/table"
+	},
+	"navigationBarTitleText": "历史账单"
+}

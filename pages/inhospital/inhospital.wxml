@@ -1,0 +1,70 @@
+<!--pages/inhospital/inhospital.wxml-->
+<view class="inhospital">
+	<image class="inhospital-bg" src="../../assets/inhospital-bg.png"></image>
+	<view class="card">
+		<view class="card-title">
+			<view class="card-title-highlight">基本信息</view>
+			<view class="card-title-border"></view>
+		</view>
+		<view class="card-info">
+			<view class="card-info-tr">
+				<view class="card-info-key">医院</view>
+				<view class="card-info-value">{{info.hospital}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">姓名</view>
+				<view class="card-info-value">{{info.name}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">住院号</view>
+				<view class="card-info-value">{{info.inhospitalId}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">住院次数</view>
+				<view class="card-info-value">{{info.number}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">入院时间</view>
+				<view class="card-info-value">{{info.time}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">科室</view>
+				<view class="card-info-value">{{info.department}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">床位</view>
+				<view class="card-info-value">{{info.bedId}}</view>
+			</view>
+		</view>
+		<view class="card-info">
+			<view class="card-info-tr">
+				<view class="card-info-key">
+					<view class="card-dot card-dot-blue"></view>
+					<text>预交金额</text>
+				</view>
+				<view class="card-info-value">{{info.prepayPrice}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">
+					<view class="card-dot card-dot-gray"></view>
+					<text>已产生费用</text>
+				</view>
+				<view class="card-info-value">{{info.expense}}</view>
+			</view>
+			<view class="card-info-tr">
+				<view class="card-info-key">
+					<view class="card-dot card-dot-orange"></view>
+					<text>账户余额</text>
+				</view>
+				<view class="card-info-value">{{info.balance}}</view>
+			</view>
+		</view>
+	</view>
+	<view class="inhospital-footer">
+		<view class="inhospital-footer-input">
+			<text>￥</text>
+			<input placeholder="请输入缴费金额" type="digit" bindinput="changeTotalAmount" />
+		</view>
+		<view class="inhospital-footer-btn" style="background-color: {{canPay ? '#2e82ff' : '#cccccc'}}" bindtap="handlePayment">支付</view>
+	</view>
+</view>

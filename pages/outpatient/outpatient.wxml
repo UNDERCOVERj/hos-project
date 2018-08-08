@@ -1,0 +1,35 @@
+<!--pages/outpatient/outpatient.wxml-->
+<view class="outpatient">
+	<image class="inhospital-bg" src="../../assets/inhospital-bg.png"></image>
+	<view class="patient card">
+		<view class="patient-block">
+			<view class="patient-highlight">{{outpatientId}}</view>
+			<view class="patient-plain">门诊号</view>
+		</view>
+		<view class="patient-block">
+			<view class="patient-highlight">{{name}}</view>
+			<view class="patient-plain">姓名</view>
+		</view>		
+	</view>
+
+	<checkbox-group bindchange="computeTotalExpense">
+		<view class="outpatient-content card" wx:for="{{cards}}" wx:for-index="cardidx" wx:for-item="card" wx:key="{{card.billId}}">
+				<view class="list">
+					<view class="list-title">
+						<label>
+							<checkbox value="{{cardidx}}" checked="{{canSelect ? false : true}}" disabled="{{!canSelect}}" />
+							<view>单据号：{{card.billId}}</view>
+						</label>
+						<view class="list-title-time">
+							划价时间: {{card.time}}
+						</view>
+					</view>
+					<component-table type="cards" card="{{card}}" cardidx="{{cardidx}}" bindcustumevent="unfoldTable"></component-table>
+				</view>	
+		</view>
+	</checkbox-group>
+	<view class="pay-footer">
+		<view class="pay-footer-num">总计：<text>{{totalExpense}}</text></view>
+		<view class="pay-footer-btn" style="background-color: {{canPay ? '#2e82ff' : '#cccccc'}}">微信支付</view>
+	</view>
+</view>

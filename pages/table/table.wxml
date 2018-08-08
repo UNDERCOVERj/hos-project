@@ -1,0 +1,26 @@
+<!--pages/table/table.wxml-->
+<block>
+	<view class="list-table">
+		<view class="table-tr">
+			<view class="table-th table-column-project">项目</view>
+			<view class="table-th table-column-price">单价</view>
+			<view class="table-th table-column-quantity">数量</view>
+			<view class="table-th table-column-amount">小计</view>
+		</view>
+		<view class="table-tr" wx:for="{{cloneCard.list}}" wx:for-item="listItem" wx:for-index="listindex" wx:key="{{listindex}}">
+			<view class="table-td table-column-project">{{listItem.project}}</view>
+			<view class="table-td table-column-price">￥{{listItem.price}}</view>
+			<view class="table-td table-column-quantity">{{listItem.quantity}}</view>
+			<view class="table-td table-column-amount table-td-amount">{{listItem.amount}}</view>
+		</view>
+	</view>
+	<view class="list-footer">
+		<view class="list-footer-isUnfold" bindtap="unfoldTable" data-cardidx="{{cardidx}}" wx:if="{{componentCard.list.length > size}}">
+			<view class="list-footer-isUnfold-block list-footer-isUnfold-small" style="transform:rotate({{componentCard.isUnfold ? 135 : -45}}deg)"></view>
+			<view class="list-footer-isUnfold-block list-footer-isUnfold-big" style="transform:rotate({{componentCard.isUnfold ? 135 : -45}}deg)"></view>
+		</view>
+		<view class="list-footer-total">
+			合计：<text>￥{{componentCard.totalExpense}}</text>
+		</view>
+	</view>
+</block>

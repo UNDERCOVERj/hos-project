@@ -1,0 +1,32 @@
+<!--pages/home/home.wxml-->
+<view class='home'>
+    <view class='home-notice' style="font-size: {{textSize}}px">
+        <image class="home-notice-icon" src="../../assets/home-notice.png"></image>
+        <view class="home-notice-content" style="height: {{noticeHeight}}px">
+            <view class="home-notice-text" style="height: {{noticeHeight}}px;line-height: {{noticeHeight}}px;top: {{noticeHeight}}px" animation="{{animationData}}">{{notice[curPage].text}}</view>
+        </view>
+    </view>
+
+    <view class='home-user'>
+        <image class="home-avatar" src="{{userInfo.avatarUrl}}"></image>
+        <text class="home-nickname">{{userInfo.nickName}}</text>
+    </view>
+    <view class='home-body'>
+        <image class="home-bg" src="../../assets/home-bg.jpg"></image>
+        <image class="home-scan" src="../../assets/home-scan.png" bindtap="scanCode"></image>
+    </view>
+    <view class='home-button' bindtap="switchToHistory">
+        <text>历史账单查询</text>
+    </view>
+</view>
+<view class="modal-wrapper" wx:if="{{!hidden}}">
+    <view class="modal">
+        <view class="header">
+            <text>提示</text>
+        </view>
+        <view class="content">请授权，否则无法使用</view>
+        <view class="footer">
+            <button type="primary" size="mini" plain="{{true}}" open-type="getUserInfo" bindgetuserinfo="permitGetUserInfo">授权</button>
+        </view>
+    </view>
+</view>

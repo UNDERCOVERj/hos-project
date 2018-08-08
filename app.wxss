@@ -1,0 +1,10 @@
+/**app.wxss**/
+
+page {
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    font-size: 32rpx;
+}

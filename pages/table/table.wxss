@@ -1,0 +1,93 @@
+/* pages/table/table.wxss */
+.list-table {
+	padding: 0 30rpx;
+	box-sizing: border-box;
+	border-bottom: 1px solid #fafafa;
+}
+
+.table-tr {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.table-th {
+	height: 80rpx;
+	line-height: 80rpx;
+	color: #676767;
+	font-size: 32rpx;
+	font-weight: bold;
+}
+
+.table-td {
+	height: 60rpx;
+	line-height: 60rpx;
+	color: #999999;
+	font-size: 24rpx;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.table-column-project {
+	width: 40%;
+}
+
+.table-column-price,
+.table-column-quantity,
+.table-column-amount {
+	width: 20%;
+}
+
+.table-td-amount {
+	color: #ff6d00
+}
+
+/*合计价钱footer*/
+
+.list-footer {
+	height: 100rpx;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	box-sizing: border-box;
+	padding: 0 30rpx;
+	position: relative;
+}
+
+/*展开按钮*/
+
+.list-footer-isUnfold {
+	width: 100%;
+	height: 100rpx;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	left: 50%;
+	top: 50%;
+	z-index: 100;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.list-footer-isUnfold-block {
+	border-width: 0 0 6rpx 6rpx;
+	border-style: solid;
+	border-color: #cccccc;
+}
+
+.list-footer-isUnfold-small {
+	width: 20rpx;
+	height: 20rpx;
+}
+
+.list-footer-isUnfold-big {
+	width: 20rpx;
+	height: 20rpx;
+	margin-top: -6rpx;
+}
+
+.list-footer text {
+	color: #ff6d00;
+}
