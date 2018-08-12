@@ -1,2 +1,15 @@
 <!--pages/result/result.wxml-->
-<text>pages/result/result.wxml</text>
+<view class="result" wx:if="{{type || !status}}">
+    <view class="top">
+        <image wx:if="{{status==1}}" src="../../assets/success_top.png"/>
+        <image wx:else src="../../assets/fail_top.png"/>
+    </view>
+    <view class="content">
+        <view wx:if="resultMsg" class="result-msg">{{resultMsg}}</view>
+        <view wx:if="additionalMsg" class="additional-msg">{{additionalMsg}}</view>
+    </view>
+    <view class="bottom">
+        <image src="../../assets/success_bottom.png" wx:if="{{status==1}}"/>
+        <image src="../../assets/fail_bottom.png" wx:else/>
+    </view>
+</view>

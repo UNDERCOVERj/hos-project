@@ -1,4 +1,6 @@
 // pages/outpatient/outpatient.js
+
+const WX = require('../../utils/util.js');
 Page({
 
     /**
@@ -10,46 +12,100 @@ Page({
         outpatientId: 123456789,// 门诊号
         totalExpense: 0, // 勾选的总共多少钱
         canPay: false, // 是否可以支付
-        cards: [
-            {
-                idx: 0,
-                checked: false,
-                billId: 1248,// 单据号
-                time: new Date().toLocaleString(),// 划价时间
-                totalExpense: 600,// 合计价钱
-                isUnfold: false, // 是否展开，false未展开
-                list: [
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药1233444云南白药1233444云南白药1233444',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'}
-                ]   
-            },
-            {   
-                idx: 1,
-                checked: false,
-                billId: 1247,// 单据号
-                time: new Date().toLocaleString(),// 划价时间
-                totalExpense: 600,// 合计价钱
-                isUnfold: false, // 是否展开，false未展开
-                list: [
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药1233444云南白药1233444云南白药1233444',price: 24,quantity: 23, amount: '100.00'}
-                ]   
-            }
-        ]
+        // cards: [
+        //     {
+        //         idx: 0,
+        //         checked: false,
+        //         billId: 1248,// 单据号
+        //         time: new Date().toLocaleString(),// 划价时间
+        //         totalExpense: 600,// 合计价钱
+        //         isUnfold: false, // 是否展开，false未展开
+        //         list: [
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药1233444云南白药1233444云南白药1233444',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'}
+        //         ]   
+        //     },
+        //     {   
+        //         idx: 1,
+        //         checked: false,
+        //         billId: 1247,// 单据号
+        //         time: new Date().toLocaleString(),// 划价时间
+        //         totalExpense: 600,// 合计价钱
+        //         isUnfold: false, // 是否展开，false未展开
+        //         list: [
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药1233444云南白药1233444云南白药1233444',price: 24,quantity: 23, amount: '100.00'}
+        //         ]   
+        //     }
+        // ]
+        cards: []
     },
 
     /**
     * 生命周期函数--监听页面加载
     */
     onLoad: function (options) {
-        // this.initCloneCards()
+        let {
+            mzNo
+        } = options;
+        WX.request({
+            url: '/ThirdParty/getOutpatientWaitPayList',
+            success: (resData) => {
+                let {
+                    mzh,
+                    brid,
+                    brxm,
+                    dj_list // object
+                } = resData;
+                let cards = []
+                this.setData({
+                    outpatientId: mzh,
+                    name: brxm
+                })
+                Object.keys(dj_list).forEach((key) => {
+                    let list = dj_list[key];
+                    let {
+                        no,
+                        hjsj_time,
+                        sfxm_list // arr
+                    } = list;
+                    let card = {
+                        checked: false,
+                        isUnfold: false,
+                        billId: no,
+                        time: hjsj_time,
+                        totalExpense: 0,
+                        list: []
+                    }
+                    card.list = sfxm_list.map((list_item) => {
+                        let {   
+                            sfxm,
+                            xmdj,
+                            xmsl,
+                            xmfyxj
+                        } = list_item;
+                        card.totalExpense += +xmfyxj;
+                        return {
+                            project: sfxm,
+                            price: xmdj,
+                            quantity: xmsl,
+                            amount: xmfyxj
+                        }
+                    })
+                    cards.push(card)
+                })
+                this.setData({
+                    cards
+                })
+            }
+        })
     },
 
     /**

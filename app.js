@@ -16,5 +16,7 @@ App({
     },
     
 
-    globalData: {}
+    globalData: {
+        hospitalId: 1234
+    }
 })

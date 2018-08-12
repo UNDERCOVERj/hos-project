@@ -3,7 +3,6 @@
     "pages/home/home",
     "pages/outpatient/outpatient",
     "pages/inhospital/inhospital",
-    
     "pages/result/result",
     "pages/history/history"
   ],

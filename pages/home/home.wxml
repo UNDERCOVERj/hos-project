@@ -7,9 +7,12 @@
         </view>
     </view>
 
-    <view class='home-user'>
+    <view class='home-user' wx:if="{{hidden}}">
         <image class="home-avatar" src="{{userInfo.avatarUrl}}"></image>
         <text class="home-nickname">{{userInfo.nickName}}</text>
+    </view>
+    <view class='home-login' wx:if="{{!hidden}}">
+        <button type="primary" size="mini" plain="{{true}}" open-type="getUserInfo" bindgetuserinfo="permitGetUserInfo">登录</button>
     </view>
     <view class='home-body'>
         <image class="home-bg" src="../../assets/home-bg.jpg"></image>
@@ -19,7 +22,7 @@
         <text>历史账单查询</text>
     </view>
 </view>
-<view class="modal-wrapper" wx:if="{{!hidden}}">
+<!-- <view class="modal-wrapper" wx:if="{{!hidden}}">
     <view class="modal">
         <view class="header">
             <text>提示</text>
@@ -29,4 +32,4 @@
             <button type="primary" size="mini" plain="{{true}}" open-type="getUserInfo" bindgetuserinfo="permitGetUserInfo">授权</button>
         </view>
     </view>
-</view>
+</view> -->

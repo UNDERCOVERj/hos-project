@@ -1,6 +1,6 @@
 // pages/home/home.js
-const app = getApp();
 const WX = require('../../utils/util.js');
+const app = getApp();
 
 Page({
 
@@ -55,16 +55,10 @@ Page({
     },
 
     /**
-     * 生命周期函数--监听页面初次渲染完成
-     */
-    onReady: function () {
-    },
-
-    /**
      * 生命周期函数--监听页面显示
      */
     onShow: function() {
-        if (!this.data.notice.length) return;
+        if (!this.data.notice.length) return; // 第一次进入等待请求返回notice
         this.transToOrigin();
         this.run();
     },
@@ -72,40 +66,13 @@ Page({
     /**
      * 生命周期函数--监听页面隐藏
      */
-    onHide: function () {
+    onHide: function (cb) {
         this.transToOrigin();
         this.setData({
             curPage: 0
-        })
+        }, typeof cb === 'function' && cb)
         clearTimeout(this.upTimer);
         clearTimeout(this.leftTimer);
-    },
-
-    /**
-     * 生命周期函数--监听页面卸载
-     */
-    onUnload: function () {
-    },
-
-    /**
-     * 页面相关事件处理函数--监听用户下拉动作
-     */
-    onPullDownRefresh: function () {
-
-    },
-
-    /**
-     * 页面上拉触底事件的处理函数
-     */
-    onReachBottom: function () {
-
-    },
-
-    /**
-     * 用户点击右上角分享
-     */
-    onShareAppMessage: function () {
-
     },
 
     // 允许授权
@@ -186,38 +153,91 @@ Page({
                 mini_open_id
             },
             success: () => {
-                console.log('设置用户信息成功')
+                wx.showToast({
+                    title: '登录成功',
+                    icon: 'success',
+                    duration: 1000
+                })
             },
         })
     },
 
+    // 检查是否登录
+    checkLogin () {
+        if (this.data.hidden) {
+            return true;
+        } else {
+            wx.showToast({
+                title: '请登录',
+                icon: "none",
+                duration: 1000
+            })
+            return false;
+        }
+    },
+
     // 扫码
     scanCode () {
+        // 先检查是否登录
+        if (!this.checkLogin()) return;
         // 在跳转时，先将信息转成第一条
-        this.transToOrigin();
-        this.setData({
-            curPage: 0
-        }, () => {
+        this.onHide(() => {
             wx.scanCode({
                 success: (res) => {
-                    console.log(res)
+                    // 扫描成功后的返回对象
+                    // {
+                    //     charSet: "UTF-8",
+                    //     errMsg: "scanCode:ok",
+                    //     result: "http://www.xhhmei.com?id=1234&mzh=MZ23",
+                    //     scanType: "QR_CODE"
+                    // }
+                    // 医院ID&MZ123
+                    // 医院ID&ZY123&2
+                    let resStr = res.result;
+                    let resStrArr = resStr.split('&');
+                    let hospitalId = resStr && resStrArr[0];
+                    // 条件1：医院id一样
+                    if (hospitalId != app.globalData.hospitalId) {
+                        wx.navigateTo({
+                            url: `/pages/result/result?type=0&status=0&resultMsg=医院id不一致`
+                        })
+                    } else if (resStr.indexOf('ZY') <= -1 && resStr.indexOf('MZ') <= -1) { // 条件2：扫描到住院号或者门诊号
+                        wx.navigateTo({
+                            url: `/pages/result/result?type=0&status=0&resultMsg=未扫描到门诊号或者住院号`
+                        })
+                    } else if (resStr.indexOf('ZY') > -1) { // 条件1和条件2都满足
+                        wx.navigateTo({
+                            url: `/pages/result/result?type=0&status=1&mzNo=${resStrArr[1]}`
+                        })
+                    } else  if (resStr.indexOf('MZ') > -1) { // 条件1和条件2都满足
+                        wx.navigateTo({
+                            url: `/pages/result/result?type=0&status=1&zyNo=${resStrArr[1]}&zyTimes=${resStrArr[2]}`
+                        })
+                    }
+                    
+                },
+                fail: (res) => {
+                    if (res.errMsg !== 'scanCode:fail cancel') {
+                        wx.navigateTo({
+                            url: `/pages/result/result?type=0&status=0&resultMsg=扫描失败`
+                        })
+                    }
                 }
             })
-        })        
+            
+        })    
         
     },
     // 跳转到历史详情
     switchToHistory () {
+        // 先检查是否登录
+        if (!this.checkLogin()) return;
         // 在跳转时，先将信息转成第一条
-        this.transToOrigin();
-        this.setData({
-            curPage: 0
-        }, () => {
+        this.onHide(() => {
             wx.navigateTo({
                 url: '/pages/history/history?type=1'
             })
         })
-        
     },
 
     // 将text回到原点

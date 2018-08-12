@@ -1,4 +1,5 @@
 // pages/history/history.js
+const WX = require('../../utils/util.js');
 Page({
 
     /**
@@ -32,56 +33,57 @@ Page({
         curPrice: 0, // 表示prices数组的选中项
         pickerViewValue: [0, 0, 0, 0],
         pickerViewHiddenFlag: true,
-        // 。。
-        outpatientBills: [ // 门诊账单，没有时为null/空数组
-            {
-                outpatientId: 12,// 门诊号
-                billId: 223,// 单据号
-                totalExpense: 230,// 合计价钱
-                isUnfold: false,
-                list: [
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药1233444云南白药1233444云南白药1233444',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
-                    {project: '云南白药',price: 24,quantity: 23, amount: '100.00'}
-                ]   
-            },
-            {
-                outpatientId: 12,// 门诊号
-                billId: 2234,// 单据号
-                totalExpense: 230,// 合计价钱
-                isUnfold: false,
-                list: [
-                    {
-                        project: '云南白药啊啊啊啊',// 项目名
-                        price: 12,// 单价
-                        quantity: 10, // 数量
-                        amount: 20// 小计
-                    }
-                ]   
-            }
-        ],
-        inhospitalDeposit: [ // 住院押金，没有时为null/空数组
-            {   
-                inhospitalId: 123, // 住院号
-                name: '乐俊杰',// 姓名
-                orderId: 234,// 订单号
-                expense: 123,// 缴费金额
-                time: new Date().toLocaleString() // 缴费时间
-            },
-            {   
-                inhospitalId: 123, // 住院号
-                name: '乐俊杰',// 姓名
-                orderId: 234,// 订单号
-                expense: 123,// 缴费金额
-                time: new Date().toLocaleString() // 缴费时间
-            }
-        ],
+        outpatientBills: [],
+        // outpatientBills: [ // 门诊账单，没有时为null/空数组
+        //     {
+        //         outpatientId: 12,// 门诊号
+        //         billId: 223,// 单据号
+        //         totalExpense: 230,// 合计价钱
+        //         isUnfold: false,
+        //         list: [
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药1233444云南白药1233444云南白药1233444',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'},
+        //             {project: '云南白药',price: 24,quantity: 23, amount: '100.00'}
+        //         ]   
+        //     },
+        //     {
+        //         outpatientId: 12,// 门诊号
+        //         billId: 2234,// 单据号
+        //         totalExpense: 230,// 合计价钱
+        //         isUnfold: false,
+        //         list: [
+        //             {
+        //                 project: '云南白药啊啊啊啊',// 项目名
+        //                 price: 12,// 单价
+        //                 quantity: 10, // 数量
+        //                 amount: 20// 小计
+        //             }
+        //         ]   
+        //     }
+        // ],
+        inhospitalDeposit: [],
+        // inhospitalDeposit: [ // 住院押金，没有时为null/空数组
+        //     {   
+        //         inhospitalId: 123, // 住院号
+        //         name: '乐俊杰',// 姓名
+        //         orderId: 234,// 订单号
+        //         expense: 123,// 缴费金额
+        //         time: new Date().toLocaleString() // 缴费时间
+        //     },
+        //     {   
+        //         inhospitalId: 123, // 住院号
+        //         name: '乐俊杰',// 姓名
+        //         orderId: 234,// 订单号
+        //         expense: 123,// 缴费金额
+        //         time: new Date().toLocaleString() // 缴费时间
+        //     }
+        // ],
         inhospitalBills: [ // 这儿是通过住院号区分吗（数组形式还是单个对象形式？）？住院费用清单, 没有时为null/空数组
             {
                 inhospitalId: 123,// 住院号
@@ -146,56 +148,11 @@ Page({
     * 生命周期函数--监听页面加载 通过type来控制active页面
     */
     onLoad: function (options) {
-        this.initialPickerViewData()
-    },
-
-    /**
-    * 生命周期函数--监听页面初次渲染完成
-    */
-    onReady: function () {
-
-    },
-
-    /**
-    * 生命周期函数--监听页面显示
-    */
-    onShow: function () {
-
-    },
-
-    /**
-    * 生命周期函数--监听页面隐藏
-    */
-    onHide: function () {
-
-    },
-
-    /**
-    * 生命周期函数--监听页面卸载
-    */
-    onUnload: function () {
-
-    },
-
-    /**
-    * 页面相关事件处理函数--监听用户下拉动作
-    */
-    onPullDownRefresh: function () {
-
-    },
-
-    /**
-    * 页面上拉触底事件的处理函数
-    */
-    onReachBottom: function () {
-
-    },
-
-    /**
-    * 用户点击右上角分享
-    */
-    onShareAppMessage: function () {
-
+        // this.initialPickerViewData()
+        let {
+            type
+        } = options;
+        this.initialData(type)
     },
 
     switchToHistory (e) {
@@ -205,6 +162,7 @@ Page({
                 type
             })
         }
+        this.initialData(type)
     },
     // 组件里改变isUnfold，需要在父组件同步改变, 也是为了保持伸展状态
     unfoldTable (e) {
@@ -281,5 +239,81 @@ Page({
     // 确认改变蒙层
     confirmModal () {
 
+    },
+    // 初始化数据
+    initialData (type) {
+        if (type == 1) {
+            if (this.data.outpatientBills && this.data.outpatientBills.length) return;
+            WX.request({
+                url: '/Order/getOutpatientOrderList',
+                success: (resData) => {
+                    let list = resData.list;
+                    let outpatientBills = [];
+                    list.forEach((listItem) => {
+                        let {
+                            outpatient_number,
+                            bill_number,
+                            real_money,
+                            project_list
+                        } = listItem;
+                        let item = {
+                            outpatientId: outpatient_number,
+                            billId: bill_number,
+                            totalExpense: real_money,
+                            isUnfold: false,
+                            list: []
+                        };
+                        item.list = project_list.map((item) => {
+                            let {
+                                project_name,
+                                unit_price,
+                                num,
+                                sum_price
+                            } = item;
+                            return {
+                                project: project_name,
+                                price: unit_price,
+                                quantity: num,
+                                amount: sum_price
+                            }
+                        })
+                        outpatientBills.push(item);
+                    })
+                    console.log(outpatientBills)
+                    this.setData({
+                        outpatientBills
+                    })
+                }
+            })
+        } else if (type == 2) {
+            if (this.data.inhospitalDeposit && this.data.inhospitalDeposit.length) return;
+            WX.request({
+                url: '/Order/getInpatientOrderList',
+                success: (resData) => {
+                    let list = resData.list;
+                    let inhospitalDeposit = [];
+                    inhospitalDeposit = list.map((item) => {
+                        let {
+                            inpatient_number,
+                            order_number,
+                            pay_money,
+                            pay_time_date
+                        } = item;
+                        return {
+                            inhospitalId: inpatient_number,
+                            name: 'xxxx',
+                            orderId: order_number,
+                            expense: pay_money,
+                            time: pay_time_date
+                        }
+                    })
+                    this.setData({
+                        inhospitalDeposit
+                    })
+                }
+            })
+        } else if (type == 3) {
+
+        }
     }
 })

@@ -1,1 +1,23 @@
 /* pages/result/result.wxss */
+
+.result {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.result image {
+    width: 500rpx;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* .result-msg {
+    color: #2e82ff;
+} */
