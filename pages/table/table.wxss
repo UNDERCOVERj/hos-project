@@ -1,5 +1,16 @@
 /* pages/table/table.wxss */
-.list-table {
+
+.classification {
+	height: 80rpx;
+	line-height: 80rpx;
+}
+
+.classification text {
+	color: #ff6d00;
+}
+
+.list-table,
+.classification {
 	padding: 0 30rpx;
 	box-sizing: border-box;
 	border-bottom: 1px solid #fafafa;
@@ -8,7 +19,7 @@
 .table-tr {
 	display: flex;
 	align-items: center;
-	justify-content: space-around;
+	justify-content: space-between;
 }
 
 .table-th {
@@ -30,14 +41,14 @@
 }
 
 .table-column-project {
-	width: 40%;
+	width: 8em;
 }
 
-.table-column-price,
+/* .table-column-price,
 .table-column-quantity,
 .table-column-amount {
 	width: 20%;
-}
+} */
 
 .table-td-amount {
 	color: #ff6d00

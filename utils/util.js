@@ -387,7 +387,10 @@ const strategy = {
         "message": "success",
         "data": {
             "chargeTimeArr": {
-                "收费时间（时间戳）": "收费时间（格式化）"
+                1534054260598: "2018/8/12 下午2:11:00",
+                1486771200000: "eejeijfo",
+                1533975140531: "dio",
+                1531385396859: "djdiow"
             },
             "patientInfo": {
                 "name": "病人姓名",
@@ -395,13 +398,152 @@ const strategy = {
                 "total_cost": "总收费金额"
             },
             "costList": {
-                "收费时间（时间戳）": {
+                1531385396859: {
                     "费用分类": {
                         "category_name": "费用分类",
-                        "category_total_cost": "当前分类总收费金额",
+                        "category_total_cost": "10000",
                         "project_list": [
                             {
                                 "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },{
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },{
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            }
+                        ]
+                    }
+                },
+                1534054260598: {
+                    "费用分类": {
+                        "category_name": "费用分类",
+                        "category_total_cost": "10000",
+                        "project_list": [
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            }
+                        ]
+                    }
+                },
+                1533975140531: {
+                    "费用分类34": {
+                        "category_name": "费用分类",
+                        "category_total_cost": "10000",
+                        "project_list": [
+                            {
+                                "project_name": "项目名称221212",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称2233",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            }
+                        ]
+                    }
+                },
+                1486771200000: {
+                    "费用分类2": {
+                        "category_name": "费用分类",
+                        "category_total_cost": "10000",
+                        "project_list": [
+                            {
+                                "project_name": "项目名称221212",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称2233",
                                 "project_specifications": "项目规格",
                                 "project_unit": "项目单位",
                                 "project_unit_price": "项目单价",

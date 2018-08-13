@@ -55,7 +55,18 @@
 }
 
 .list-title-billId {
-	color: #999999;
+	color: #2e82ff;
+}
+.list-title-billId-icon {
+	width: 20rpx;
+	height: 20rpx;
+	position: relative;
+	top: 4rpx;
+	transform: rotate(45deg);
+	display: inline-block;
+	border-width: 4rpx 4rpx 0 0;
+	border-color: #cccccc;
+	border-style: solid;
 }
 
 /*住院押金*/
