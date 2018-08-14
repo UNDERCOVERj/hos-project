@@ -205,14 +205,15 @@ Page({
                         wx.navigateTo({
                             url: `/pages/result/result?type=0&status=0&resultMsg=未扫描到门诊号或者住院号`
                         })
-                    } else if (resStr.indexOf('ZY') > -1) { // 条件1和条件2都满足
+                    } else if (resStr.indexOf('MZ') > -1) { // 条件1和条件2都满足
                         wx.navigateTo({
                             url: `/pages/result/result?type=0&status=1&mzNo=${resStrArr[1]}`
                         })
-                    } else  if (resStr.indexOf('MZ') > -1) { // 条件1和条件2都满足
+                    } else if (resStr.indexOf('ZY') > -1) { // 条件1和条件2都满足
                         wx.navigateTo({
                             url: `/pages/result/result?type=0&status=1&zyNo=${resStrArr[1]}&zyTimes=${resStrArr[2]}`
                         })
+                    } else {
                     }
                     
                 },

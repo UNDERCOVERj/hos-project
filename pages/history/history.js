@@ -211,16 +211,27 @@ Page({
             curDay,
             curPrice
         } = data;
+
         const priceInfo = inhospitalBills[curPickerView]['priceInfo'];
-        const tempMonths = priceInfo[curYear]['months']; // 临时months
+
+        if (!priceInfo.length) return;
+        const tempMonths = priceInfo[priceInfo.length - 1]['months']; // 临时months
 
         const years = priceInfo.map((years) => years['year']);
         const months = tempMonths.map((months) => months['month']);
-        const days = tempMonths[curMonth]['days'].map(days => days['day']);
-        const prices = tempMonths[curMonth]['days'].map(days => days['price']);
-        const chargeTime = tempMonths[curMonth]['days'].map(days => days['chargeTime']);
+        const days = tempMonths[tempMonths.length - 1]['days'].map(days => days['day']);
+        const prices = tempMonths[tempMonths.length - 1]['days'].map(days => days['price']);
+        const chargeTime = tempMonths[tempMonths.length - 1]['days'].map(days => days['chargeTime']);
 
+        curYear = years.length - 1;
+        curMonth = months.length - 1;
+        curDay = days.length - 1;
+        curPrice = prices.length -1;
         this.setData({
+            curYear,
+            curMonth,
+            curDay,
+            curPrice,
             years,
             months,
             days,
@@ -233,19 +244,67 @@ Page({
     // 处理picker 的change事件
     bindChange (e) {
         let value = e.detail.value;
+        const data = this.data;
         let [
+            tempCurYear,
+            tempCurMonth,
+            tempCurDay,
+            tempCurPrice
+        ] = value;
+
+        let {
+            inhospitalBills,
+            curPickerView,
             curYear,
             curMonth,
             curDay,
-            curPrice
-        ] = value;
-        
+            curPrice,
+            years,
+            months,
+            days,
+            prices,
+            chargeTime
+        } = data;
+
+        const priceInfo = inhospitalBills[curPickerView]['priceInfo'];
+
+        if (!priceInfo.length) return;
+
+        if (tempCurYear !== curYear) { // 改变的是年
+            let yearidx = priceInfo.findIndex(item => item.year === years[tempCurYear]);
+            curYear = tempCurYear;
+            // const years = priceInfo.map((years) => years['year']);
+            curMonth = 0;
+            months = priceInfo[yearidx].months.map((months) => months['month']);
+            curDay = 0;
+            days = priceInfo[yearidx].months[0]['days'].map(days => days['day']);
+            curPrice = 0;
+            prices = priceInfo[yearidx].months[0]['days'].map(days => days['price']);
+            chargeTime = priceInfo[yearidx].months[0]['days'].map(days => days['chargeTime']);
+        } else if (tempCurMonth !== curMonth) {
+            curMonth = tempCurMonth;
+            let monthidx = priceInfo[curYear].months.findIndex(item => item.month === months[tempCurMonth]);
+            curDay = 0;
+            days = priceInfo[curYear].months[monthidx]['days'].map(days => days['day']);
+            curPrice = 0;
+            prices = priceInfo[curYear].months[monthidx]['days'].map(days => days['price']);
+            chargeTime = priceInfo[curYear].months[monthidx]['days'].map(days => days['chargeTime']);
+        } else {
+            curPrice = curDay = tempCurDay !== curDay ? tempCurDay: tempCurPrice; // 同时改变
+        }
         this.setData({
             curYear,
             curMonth,
-            curDay: this.data.curDay !== curDay ? curDay: curPrice,
-            curPrice: this.data.curPrice !== curPrice ? curPrice: curDay,
-        }, this.initialPickerViewData)
+            curDay,
+            curPrice,
+            years,
+            months,
+            days,
+            prices,
+            chargeTime,
+            pickerViewValue: [curYear, curMonth, curDay, curPrice],
+            priceDate: [years[curYear], months[curMonth], days[curDay]].join('-')
+        })
     },
     // 显示蒙层，传入pickerView所需的日期数据,根据索引来查找日期数据，并重新initial
     showModal (e) {
@@ -253,7 +312,7 @@ Page({
         this.setData({
             curPickerView,
             pickerViewHiddenFlag: false
-        }, this.initialPickerViewData)
+        })
     },
     // 隐藏蒙层
     cancelModal () {
@@ -269,6 +328,8 @@ Page({
             inhospitalBills,
             costList
         } = this.data;
+        console.log(chargeTime)
+        console.log(curPrice)
         let cloneCards = JSON.parse(JSON.stringify(inhospitalBills));
         cloneCards[0].card = this.getCard(chargeTime[curPrice], costList);
         this.setData({
@@ -367,7 +428,6 @@ Page({
                     let chargeTimes = {};
                     Object.keys(chargeTimeArr).forEach(time => {
                         let total = 0;
-                        console.log(costList[time])
                         Object.keys(costList[time]).forEach(item => {
                             total += +costList[time][item].category_total_cost;
                         })

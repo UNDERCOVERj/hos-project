@@ -24,7 +24,8 @@ Page({
 			zyNo, // 扫码的返回结果, 住院号
 			zyTimes, // 扫码的返回结果, 住院次数
 			status, // 扫描是否成功
-			type // 0 扫码，1 支付
+			type, // 0 扫码，1 支付
+			resultMsg // 条件1，2不满足时的msg
 		} = options;
 		this.setData({
 			...options,
@@ -34,20 +35,51 @@ Page({
 		wx.setNavigationBarTitle({
 			'title': +type ? '支付结果' : '扫码结果'
 		})
+
 		if (!+type && +status) { // 扫码成功后请求服务器, 成功就hideloading
-			WX.request({
-				url: '/ThirdParty/getOutpatientWaitPayList',
-				data: {
-					mzNo
-				},
-				success: (resData) => {
-					wx.navigateTo({
-						url: `/pages/outpatient/outpatient?mzNo=${mzNo}`
-					})
-				}
+
+			if (mzNo) { // 门诊检验3，4条件
+				WX.request({
+					url: '/ThirdParty/getOutpatientWaitPayList',
+					data: {
+						mzNo
+					},
+					success: () => {
+						wx.redirectTo({
+							url: `/pages/outpatient/outpatient?mzNo=${mzNo}`
+						})
+					},
+					fail: () => {
+						this.setData({
+							status: 0
+						})
+					}
+				})
+			} else if (zyNo) { // 住院检验3，4条件
+				WX.request({
+					url: '/ThirdParty/getInpatientWaitPayList',
+					data: {
+						zyNo,
+						zyTimes
+					},
+					success: () => {
+						wx.redirectTo({
+							url: `/pages/inpatient/inpatient?zyNo=${zyNo}&zyTimes=${zyTimes}`
+						})
+					},
+					fail: () => {
+						this.setData({
+							status: 0
+						})
+					}
+				})
+			}
+		} else if (!+type && !+status) { // 条件1，2不满足
+			this.setData({
+				resultMsg
 			})
 		} else { // 支付结果，不需要显示loading
-
+			
 		}
 	},
 

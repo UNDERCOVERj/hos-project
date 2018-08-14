@@ -14,6 +14,57 @@ const formatNumber = n => {
 	return n[1] ? n : '0' + n
 }
 
+class CodeMap {
+    constructor() {
+        this.codeMap = {
+            '200': 'success',
+            '2000': 'error',
+            '2001': '请求非法',
+            '2002': '接口参数无效',
+            // 微信
+            '3000': '微信请求错误',
+            // 医院接口
+            '4000': '医院不存在或无效',
+            '4001': '医院未有上线广告',
+            '4002': '支付广告无效或不存在',
+            '4003': '医院接口地址无效或非法',
+            '4004': '医院广告无效',
+            '4005': '医院广告不允许保留用户联系信息',
+            '4006': '已超过医院每日限额支付费用',
+            // 用户
+            '5000': '用户不存在',
+            '5001': '用户已存在',
+            // 甲方接口
+            '6000': '调用甲方接口失败',
+            '6001': '调用甲方接口未获取到任何信息',
+            // 订单
+            '7000': '页码非法'
+        }
+    }
+    checkCodeMap(code, data) {
+        if (this.codeMap[code] && code == '200') {
+            if (!data 
+                || (Array.isArray(data) && !data.length)) {
+                // || (typeof data == 'object' && !Object.keys(data).length)) {
+
+                return {
+                    msg: '数据为空',
+                    error_no: 1
+                }
+            }
+            return {
+                msg: this.codeMap[code],
+                error_no: 0
+            };
+        } else {
+            return {
+                msg: this.codeMap[code],
+                error_no: 1
+            }
+        }
+    }
+}
+
 const loop = () => {
 
 }
@@ -559,58 +610,62 @@ const strategy = {
     }
 }
 
-let loadingFlag = false;
+class Request extends CodeMap{
+    constructor() {
+        super();
+        this.loadingFlag = false;
+    }
+    request (url, resolve, reject) {
+        let {
+            data,
+            code
+        } = strategy[url];
+        let {
+            msg,
+            error_no // 1 错 0 继续
+        } = this.checkCodeMap(code, data);
+        let resData = {
+            data,
+            code
+        }
+        if (!error_no) {
+            resolve(resData)
+        } else {
+            reject(msg);
+        }
+    }
+    send({url, data, success, fail} = {url: '', data: {}, success: loop, fail: loop}) {
 
-const request = (params) => {
-	let self = this;
-	let {
-		url,
-		data,
-		success,
-		fail
-	} = params;
-	fail = fail || loop;
-	success = success || loop;
-	!loadingFlag && wx.showLoading({
-		title: '请稍等',
-		mask: true
-	})
-	return new Promise((resolve) => {
-
-		function request(url) {
-			let data = strategy[url];
-			let status = 200;
-			let resData = {
-				data,
-				status
-			}
-			if (status === 200) {
-				resolve(resData.data)
-			} else {
-				reject();
-			}
-		}
-		setTimeout(() => request.call(this, url), 500)
-		
-
-	})
-	.then((resData) => {
-		loadingFlag = false;
-		wx.hideLoading();
-		success.call(self, resData.data)
-	})
-	// .catch(() => {
-	// 	wx.showToast && wx.showToast({
-	// 		title: '请求失败',
-	// 		icon: 'none',
-	// 		duration: 1000
-	// 	})
-	// })
-	
+        !this.loadingFlag && wx.showLoading({
+            title: '请稍等',
+            mask: true
+        })
+        return new Promise((resolve, reject) => {
+            try {
+                setTimeout(() => this.request(url, resolve, reject), 500)
+            } catch (e) {
+                reject('请求错误')
+            }
+            
+        })
+        .then((resData) => {
+            this.loadingFlag = false;
+            wx.hideLoading();
+            success && success(resData.data)
+        })
+        .catch((msg = '') => {
+            wx.showToast({
+                title: msg,
+                icon: 'loading',
+                duration: 1000
+            })
+            fail && fail(msg)
+        })
+    }
 }
-
+let request = new Request();
 
 module.exports = {
 	formatTime,
-	request
+	request: request.send.bind(request)
 }
