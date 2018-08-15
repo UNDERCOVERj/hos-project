@@ -17,6 +17,7 @@ App({
     
 
     globalData: {
-        hospitalId: 1234
+        hospitalId: 1234,
+        hospitalName: "五四一医院缴费助手"
     }
 })

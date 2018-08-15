@@ -607,6 +607,36 @@ const strategy = {
                 }
             }
         }
+    },
+    "/ThirdParty/getInpatientWaitPayList": {
+        "code": 200,
+        "message": "success",
+        "data": {
+            "brxm": "病人姓名",
+            "rysj": "入院时间(甲方数据库格式化时间)",
+            "dqks": "当前科室",
+            "dqch": "当前床号",
+            "yjje": "1000",
+            "ycsfy": "1000",
+            "zhye": "2000",
+            "zyh": "住院号",
+            "zycs": "住院次数",
+            "brid": "病人ID",
+            "rysj_time":"入院时间（时间戳）"
+        }
+    },
+    "/Order/getInpatientNoAndTimeList": {
+        "code": 200,
+        "message": "success",
+        "data": [
+            {
+                "serial_number": "abcd",
+                "serial_number_list": [
+                    "1",
+                    "2"
+                ]
+            }
+        ]
     }
 }
 
@@ -616,10 +646,15 @@ class Request extends CodeMap{
         this.loadingFlag = false;
     }
     request (url, resolve, reject) {
+        console.log(strategy)
+        console.log(url)
+        console.log(strategy[url])
         let {
             data,
             code
         } = strategy[url];
+        console.log(data)
+        console.log(code)
         let {
             msg,
             error_no // 1 错 0 继续

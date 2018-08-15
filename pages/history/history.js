@@ -21,6 +21,11 @@ Page({
                 title: '住院费用清单'
             }
         ],
+        inhospitalIds: [],
+        inhospitalId: [0],
+        // 结合下面两个去请求
+        inhospitalIdIndex: 0,// 第几个
+        inhospitalIdToRequest: 0, // 第几次去请求
         // 日期选择四列
         years: [],
         months: [],
@@ -34,6 +39,7 @@ Page({
         curPrice: 0, // 表示prices数组的选中项
         pickerViewValue: [0, 0, 0, 0],
         pickerViewHiddenFlag: true,
+        inhospitalIdHiddenFlag: true, // 住院次数选择
         outpatientBills: [],
         // outpatientBills: [ // 门诊账单，没有时为null/空数组
         //     {
@@ -328,8 +334,6 @@ Page({
             inhospitalBills,
             costList
         } = this.data;
-        console.log(chargeTime)
-        console.log(curPrice)
         let cloneCards = JSON.parse(JSON.stringify(inhospitalBills));
         cloneCards[0].card = this.getCard(chargeTime[curPrice], costList);
         this.setData({
@@ -380,7 +384,6 @@ Page({
                         })
                         outpatientBills.push(item);
                     })
-                    console.log(outpatientBills)
                     this.setData({
                         outpatientBills
                     })
@@ -416,44 +419,61 @@ Page({
         } else if (type == 3) {
             if (this.data.inhospitalBills && this.data.inhospitalBills.length) return;
             WX.request({
-                url: '/ThirdParty/getInpatientCostList',
+                url: '/Order/getInpatientNoAndTimeList',
                 success: (resData) => {
-                    let {
-                        chargeTimeArr,
-                        patientInfo,
-                        costList
-                    } = resData;
-                    // 改变 chargeTimeArr： time：price
-
-                    let chargeTimes = {};
-                    Object.keys(chargeTimeArr).forEach(time => {
-                        let total = 0;
-                        Object.keys(costList[time]).forEach(item => {
-                            total += +costList[time][item].category_total_cost;
-                        })
-                        chargeTimes[time] = total;
-                    })
-
-                    let {
-                        name,
-                        admission_time_date,
-                        total_cost
-                    } = patientInfo;
-
-                    let inhospitalBills = [];
-                    let inhospitalBill = {
-                        inhospitalId: 'zy1245',
-                        name,
-                        date: admission_time_date,
-                        totalExpense: total_cost,
-                        priceInfo: this.getPriceInfo(chargeTimes) || [],
-                        card: this.getCard(Object.keys(chargeTimeArr)[0], costList)
-                    }
-                    inhospitalBills.push(inhospitalBill)
-                    this.setData({inhospitalBills, costList}, this.initialPickerViewData)
+                    this.setData({
+                        inhospitalIds: resData.map(item => ({...item, curInhospitalIndex: 0})),
+                        inhospitalIdIndex: 0,
+                        inhospitalIdToRequest: resData[0].serial_number_list[0]
+                    }, this.getInpationetNoAndTimeList)
                 }
             })
+            
         }
+    },
+    getInpationetNoAndTimeList () {
+        let {
+            inhospitalIdIndex,
+            inhospitalIdToRequest
+        } = this.data
+        WX.request({
+            url: '/ThirdParty/getInpatientCostList',
+            success: (resData) => {
+                let {
+                    chargeTimeArr,
+                    patientInfo,
+                    costList
+                } = resData;
+                // 改变 chargeTimeArr： time：price
+
+                let chargeTimes = {};
+                Object.keys(chargeTimeArr).forEach(time => {
+                    let total = 0;
+                    Object.keys(costList[time]).forEach(item => {
+                        total += +costList[time][item].category_total_cost;
+                    })
+                    chargeTimes[time] = total;
+                })
+
+                let {
+                    name,
+                    admission_time_date,
+                    total_cost
+                } = patientInfo;
+
+                let inhospitalBills = [];
+                let inhospitalBill = {
+                    // inhospitalId: 'zy1245',
+                    name,
+                    date: admission_time_date,
+                    totalExpense: total_cost,
+                    priceInfo: this.getPriceInfo(chargeTimes) || [],
+                    card: this.getCard(Object.keys(chargeTimeArr)[0], costList)
+                }
+                inhospitalBills.push(inhospitalBill)
+                this.setData({inhospitalBills, costList}, this.initialPickerViewData)
+            }
+        })
     },
     // 住院费用清单，时间改变，改变costList
     getCard (time, costList) { // 时间戳
@@ -529,7 +549,44 @@ Page({
                 }
             }
         })
-        console.log(priceInfo)
         return priceInfo;
+    },
+    showInhospitalModal (e) { // 改变第几个inhospitalIds
+        let idx = e.target.dataset.idx;
+        this.setData({
+            inhospitalIdIndex: idx, // 第几个
+            serial_number_list: this.data.inhospitalIds[idx].serial_number_list,
+            inhospitalIdHiddenFlag: false
+        })
+    },
+    bindChangeInhospitalId (e) {
+        let [
+            idx
+        ] = e.detail.value;
+        let {
+            inhospitalIds,
+            inhospitalIdIndex
+        } = this.data;
+        let nextTime = inhospitalIds[inhospitalIdIndex].serial_number_list[idx];
+        this.setData({
+            inhospitalId: [idx],
+            inhospitalIdToRequest: nextTime
+        })
+
+    },
+    confirmInhospitalIdModal () {
+
+        this.setData({
+            inhospitalIdHiddenFlag: true,
+            ["inhospitalIds[" + this.data.inhospitalIdIndex +"].curInhospitalIndex"]: this.data.inhospitalId,
+            inhospitalBills: [] // 避免不重新绘制
+        })
+
+        this.getInpationetNoAndTimeList();
+    },
+    cancelInhospitalIdModal () {
+        this.setData({
+            inhospitalIdHiddenFlag: true
+        })
     }
 })

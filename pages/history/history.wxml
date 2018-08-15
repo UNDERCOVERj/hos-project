@@ -40,7 +40,7 @@
 	<!-- 住院押金 -->
 	<block wx:if="{{type===2}}">
 		<template is="empty"  wx:if="{{inhospitalDeposit && inhospitalDeposit.length === 0}}"/>
-		<view class="card" wx:for="{{inhospitalDeposit}}" wx:for-item="info" wx:key="{{info.inhospitalId}}">
+		<view class="card" wx:for="{{inhospitalDeposit}}" wx:for-item="info" wx:for-index="inhospitalDepositIndex" wx:key="{{info.inhospitalId}}">
 			<view class="card-info-tr">
 				<view class="card-info-key">住院号</view>
 				<view class="card-info-value">{{info.inhospitalId}}</view>
@@ -71,7 +71,10 @@
 			<view class="card">
 				<view class="card-info-tr">
 					<view class="card-info-key">住院号</view>
-					<view class="card-info-value">{{item.inhospitalId}} <text>第3次</text></view>
+					<view class="card-info-value" bindtap="showInhospitalModal">
+						<text data-idx="{{idx}}">{{inhospitalIds[idx].serial_number}}</text>
+						<text data-idx="{{idx}}">第{{inhospitalIds[idx]['serial_number_list'][inhospitalIds[idx]['curInhospitalIndex']]}}次</text>
+					</view>
 				</view>
 				<view class="card-info-tr">
 					<view class="card-info-key">姓名</view>
@@ -129,4 +132,22 @@
 	        </view>
 	    </view>
 	</view>
+	<view class="modal-wrapper" wx:if="{{!inhospitalIdHiddenFlag}}">
+			<view class="modal">
+				<view class="header">
+					<text>选择第几次住院</text>
+				</view>
+				<view class="content">
+					<picker-view indicator-style="height: 50px;" class="picker-view" value="{{inhospitalId}}" bindchange="bindChangeInhospitalId">
+						<picker-view-column>
+							<view wx:for="{{serial_number_list}}" wx:for-index="yearidx" wx:key="{{yearidx}}" class="picker-view-column">{{item}}</view>
+						</picker-view-column>	
+					</picker-view>
+				</view>
+				<view class="footer">
+					<view class="footer-btn-cancel" bindtap="cancelInhospitalIdModal">取消</view>
+					<view class="footer-btn-confirm" bindtap="confirmInhospitalIdModal">确认</view>
+				</view>
+			</view>
+		</view>
 </view>

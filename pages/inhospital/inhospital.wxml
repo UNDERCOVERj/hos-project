@@ -9,31 +9,31 @@
 		<view class="card-info">
 			<view class="card-info-tr">
 				<view class="card-info-key">医院</view>
-				<view class="card-info-value">{{info.hospital}}</view>
+				<view class="card-info-value">{{hospital}}</view>
 			</view>
 			<view class="card-info-tr">
 				<view class="card-info-key">姓名</view>
-				<view class="card-info-value">{{info.name}}</view>
+				<view class="card-info-value">{{name}}</view>
 			</view>
 			<view class="card-info-tr">
 				<view class="card-info-key">住院号</view>
-				<view class="card-info-value">{{info.inhospitalId}}</view>
+				<view class="card-info-value">{{inhospitalId}}</view>
 			</view>
 			<view class="card-info-tr">
 				<view class="card-info-key">住院次数</view>
-				<view class="card-info-value">{{info.number}}</view>
+				<view class="card-info-value">{{number}}</view>
 			</view>
 			<view class="card-info-tr">
 				<view class="card-info-key">入院时间</view>
-				<view class="card-info-value">{{info.time}}</view>
+				<view class="card-info-value">{{time}}</view>
 			</view>
 			<view class="card-info-tr">
 				<view class="card-info-key">科室</view>
-				<view class="card-info-value">{{info.department}}</view>
+				<view class="card-info-value">{{department}}</view>
 			</view>
 			<view class="card-info-tr">
 				<view class="card-info-key">床位</view>
-				<view class="card-info-value">{{info.bedId}}</view>
+				<view class="card-info-value">{{bedId}}</view>
 			</view>
 		</view>
 		<view class="card-info">
@@ -42,21 +42,21 @@
 					<view class="card-dot card-dot-blue"></view>
 					<text>预交金额</text>
 				</view>
-				<view class="card-info-value">{{info.prepayPrice}}</view>
+				<view class="card-info-value">{{prepayPrice}}</view>
 			</view>
 			<view class="card-info-tr">
 				<view class="card-info-key">
 					<view class="card-dot card-dot-gray"></view>
 					<text>已产生费用</text>
 				</view>
-				<view class="card-info-value">{{info.expense}}</view>
+				<view class="card-info-value">{{expense}}</view>
 			</view>
 			<view class="card-info-tr">
 				<view class="card-info-key">
 					<view class="card-dot card-dot-orange"></view>
 					<text>账户余额</text>
 				</view>
-				<view class="card-info-value">{{info.balance}}</view>
+				<view class="card-info-value">{{balance}}</view>
 			</view>
 		</view>
 	</view>

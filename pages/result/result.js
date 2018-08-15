@@ -37,7 +37,6 @@ Page({
 		})
 
 		if (!+type && +status) { // 扫码成功后请求服务器, 成功就hideloading
-
 			if (mzNo) { // 门诊检验3，4条件
 				WX.request({
 					url: '/ThirdParty/getOutpatientWaitPayList',
@@ -64,7 +63,7 @@ Page({
 					},
 					success: () => {
 						wx.redirectTo({
-							url: `/pages/inpatient/inpatient?zyNo=${zyNo}&zyTimes=${zyTimes}`
+							url: `/pages/inhospital/inhospital?zyNo=${zyNo}&zyTimes=${zyTimes}`
 						})
 					},
 					fail: () => {

@@ -1,12 +1,16 @@
 // pages/inhospital/inhospital.js
+
+const app = getApp();
+const WX = require('../../utils/util.js');
+
 Page({
 
     /**
     * 页面的初始数据
     */
     data: {
-        info: {
-            hospital: '一个医院', // 医院名
+        // info: {
+            hospital: app.globalData.hospitalName, // 医院名
             name: '乐俊杰',// 姓名
             inhospitalId: 1234,// 住院号
             number: 2,// 次数
@@ -15,8 +19,8 @@ Page({
             bedId: 34,// 床位号
             prepayPrice: 1200,// 预交金额
             expense: 3000,// 已产生费用
-            balance: 2444// 余额
-        },
+            balance: 2444,// 余额
+        // },
         totalAmount: 0,
         canPay: false
     },
@@ -25,7 +29,39 @@ Page({
     * 生命周期函数--监听页面加载
     */
     onLoad: function (options) {
-        console.log(options)
+        let {
+            zyNo,
+            zyTimes
+        } = options;
+
+        WX.request({
+            url: '/ThirdParty/getInpatientWaitPayList',
+            success: (resData) => {
+                let {
+                    // hospital,
+                    brxm: name,
+                    zyh: inhospitalId,
+                    zycs: number,
+                    rysj: time,
+                    dqks: department,
+                    dqch: bedId,
+                    yjje: prepayPrice,
+                    ycsfy: expense,
+                    zhye: balance
+                } = resData;
+                this.setData({
+                    name,
+                    inhospitalId,
+                    number,
+                    time,
+                    department,
+                    bedId,
+                    prepayPrice,
+                    expense,
+                    balance
+                })
+            }
+        })
     },
 
     /**
