@@ -14,6 +14,22 @@ const formatNumber = n => {
 	return n[1] ? n : '0' + n
 }
 
+const add = (a, b) => {
+    a = a + '';
+    b = b + '';
+    let aL = a.split('.')[1];
+    let bL = b.split('.')[1];
+    let aLen = aL && aL.length || 0;
+    let bLen = bL && bL.length || 0;
+
+    let m = aLen > bLen ? aLen : bLen;
+
+    let bei = Math.pow(10, m);
+    a = +a * bei;
+    b = +b * bei;
+    return (a + b)/bei;
+}
+
 class CodeMap {
     constructor() {
         this.codeMap = {
@@ -143,6 +159,48 @@ const strategy = {
                             "xmfl": "项目分类",
                             "xmsl": "10",
                             "xmfyxj": "100"
+                        },{
+                            "sfxm": "收费项目",
+                            "xmdj": "10",
+                            "dw": "单位",
+                            "xmfl": "项目分类",
+                            "xmsl": "10",
+                            "xmfyxj": "100"
+                        },{
+                            "sfxm": "收费项目",
+                            "xmdj": "10",
+                            "dw": "单位",
+                            "xmfl": "项目分类",
+                            "xmsl": "10",
+                            "xmfyxj": "100"
+                        },{
+                            "sfxm": "收费项目",
+                            "xmdj": "10",
+                            "dw": "单位",
+                            "xmfl": "项目分类",
+                            "xmsl": "10",
+                            "xmfyxj": "100"
+                        },{
+                            "sfxm": "收费项目",
+                            "xmdj": "10",
+                            "dw": "单位",
+                            "xmfl": "项目分类",
+                            "xmsl": "10",
+                            "xmfyxj": "100"
+                        },{
+                            "sfxm": "收费项目",
+                            "xmdj": "10",
+                            "dw": "单位",
+                            "xmfl": "项目分类",
+                            "xmsl": "10",
+                            "xmfyxj": "100"
+                        },{
+                            "sfxm": "收费项目",
+                            "xmdj": "10",
+                            "dw": "单位",
+                            "xmfl": "项目分类",
+                            "xmsl": "10",
+                            "xmfyxj": "100.134"
                         },{
                             "sfxm": "收费项目",
                             "xmdj": "10",
@@ -428,6 +486,44 @@ const strategy = {
                     "created_time": "订单生成时间",
                     "pay_time": "支付时间",
                     "pay_time_date": "支付时间(格式化)"
+                },{
+                    "id": "订单id",
+                    "order_number": "订单编号",
+                    "pay_status": "支付状态（0：待支付：1：支付成功）",
+                    "hospital_id": "医院ID",
+                    "hospital_name": "医院名称",
+                    "inpatient_number": "住院号",
+                    "serial_number": "住院次数号",
+                    "department": "department",
+                    "bed_number": "床位号",
+                    "advance_money":"预交金额",
+                    "cost_money":"已产生费用",
+                    "account_balance":"账户余额",
+                    "real_money": "当前订单实际金额",
+                    "pay_money": "当前订单支付金额",
+                    "user_id": "用户ID",
+                    "created_time": "订单生成时间",
+                    "pay_time": "支付时间",
+                    "pay_time_date": "支付时间(格式化)"
+                },{
+                    "id": "订单id",
+                    "order_number": "订单编号",
+                    "pay_status": "支付状态（0：待支付：1：支付成功）",
+                    "hospital_id": "医院ID",
+                    "hospital_name": "医院名称",
+                    "inpatient_number": "住院号",
+                    "serial_number": "住院次数号",
+                    "department": "department",
+                    "bed_number": "床位号",
+                    "advance_money":"预交金额",
+                    "cost_money":"已产生费用",
+                    "account_balance":"账户余额",
+                    "real_money": "当前订单实际金额",
+                    "pay_money": "当前订单支付金额",
+                    "user_id": "用户ID",
+                    "created_time": "订单生成时间",
+                    "pay_time": "支付时间",
+                    "pay_time_date": "支付时间(格式化)"
                 }
             ]
         }
@@ -637,6 +733,33 @@ const strategy = {
                 ]
             }
         ]
+    },
+    '/Hospital/getIsSinglePay': {
+        "code": 200,
+        "info": "success",
+        "data":{
+            "is_allow_single_pay": "0"
+        }
+    },
+    // 获取是否广告
+    '/Hospital/getIsOpenAdvert': {
+        "code": 200,
+        "info": "success",
+        "data":{
+            "advert_is_open": "1"
+        }
+    },
+    // 广告详情
+    '/Hospital/getOpenAdvert': {
+        "code": 200,
+        "info": "success",
+        "data":{
+            "id":"广告ID",
+            "advert_name":"广告名称",
+            "is_detail_skip":"0",
+            "is_allow_save_contacts":"是否允许用户留存信息",
+            "advert_detail":"广告详情"
+        }
     }
 }
 
@@ -653,8 +776,6 @@ class Request extends CodeMap{
             data,
             code
         } = strategy[url];
-        console.log(data)
-        console.log(code)
         let {
             msg,
             error_no // 1 错 0 继续
@@ -701,6 +822,7 @@ class Request extends CodeMap{
 let request = new Request();
 
 module.exports = {
-	formatTime,
+    formatTime,
+    add,
 	request: request.send.bind(request)
 }

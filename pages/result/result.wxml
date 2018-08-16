@@ -9,7 +9,11 @@
         <view wx:if="additionalMsg" class="additional-msg">{{additionalMsg}}</view>
     </view>
     <view class="bottom">
-        <image src="../../assets/success_bottom.png" wx:if="{{status==1}}"/>
-        <image src="../../assets/fail_bottom.png" wx:else/>
+        <image src="../../assets/fail_bottom.png" wx:if="{{status==0}}"/>
+        <image src="../../assets/success_bottom.png" wx:elif="{{type==0 || type==1 && !adFlag}}"/>
+        <view wx:elif="{{type==1 && adFlag}}" class="bottom-ad">
+            <view class="bottom-ad-img">占位占位广告广告</view>
+            <view class="bottom-detail" wx:if="is_detail_skip">查看详情</view>
+        </view>
     </view>
 </view>

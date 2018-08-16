@@ -7,7 +7,7 @@ Page({
     * 页面的初始数据
     */
     data: {
-        canSelect: true, // 是否可选择性支付
+        canSelect: false, // 是否可选择性支付
         name: '乐俊杰',// 姓名
         outpatientId: 123456789,// 门诊号
         totalExpense: 0, // 勾选的总共多少钱
@@ -52,6 +52,9 @@ Page({
     * 生命周期函数--监听页面加载
     */
     onLoad: function ({zyNo, zyTimes} = {zyNo: 0, zyTimes: 0}) {
+
+        
+
         WX.request({
             url: '/ThirdParty/getOutpatientWaitPayList',
             success: (resData) => {
@@ -62,10 +65,6 @@ Page({
                     dj_list // object
                 } = resData;
                 let cards = []
-                this.setData({
-                    outpatientId: mzh,
-                    name: brxm
-                })
                 Object.keys(dj_list).forEach((key) => {
                     let list = dj_list[key];
                     let {
@@ -88,8 +87,8 @@ Page({
                             xmsl,
                             xmfyxj
                         } = list_item;
-                        card.totalExpense += +xmfyxj;
-                        return {
+                        card.totalExpense = WX.add(card.totalExpense, xmfyxj);
+                        return { 
                             project: sfxm,
                             price: xmdj,
                             quantity: xmsl,
@@ -99,80 +98,44 @@ Page({
                     cards.push(card)
                 })
                 this.setData({
-                    cards
+                    cards,
+                    outpatientId: mzh,
+                    name: brxm
+                })
+                WX.request({
+                    url: '/Hospital/getIsSinglePay',
+                    success: (resData) => {
+                        let {
+                            is_allow_single_pay
+                        } = resData;
+                        if (is_allow_single_pay == '1') {
+                            this.setData({
+                                canSelect: true
+                            })
+                        } else {
+                            let totalExpense = cards.reduce((total, val, idx) => (total = WX.add(total, val.totalExpense)), 0);
+                            this.setData({
+                                totalExpense: totalExpense,
+                                canPay: totalExpense ? true : false
+                            })
+                        }
+                    }
                 })
             }
         })
     },
-
-    /**
-    * 生命周期函数--监听页面初次渲染完成
-    */
-    onReady: function () {
-
-    },
-
-    /**
-    * 生命周期函数--监听页面显示
-    */
-    onShow: function () {
-
-    },
-
-    /**
-    * 生命周期函数--监听页面隐藏
-    */
-    onHide: function () {
-
-    },
-
-    /**
-    * 生命周期函数--监听页面卸载
-    */
-    onUnload: function () {
-
-    },
-
-    /**
-    * 页面相关事件处理函数--监听用户下拉动作
-    */
-    onPullDownRefresh: function () {
-
-    },
-
-    /**
-    * 页面上拉触底事件的处理函数
-    */
-    onReachBottom: function () {
-
-    },
-
-    /**
-    * 用户点击右上角分享
-    */
-    onShareAppMessage: function () {
-
-    },
     // 组件里改变isUnfold，需要在父组件同步改变
-    unfoldTable (e) {
-        // let {
-        //     cardidx
-        // } = e.detail;
-        // let cards = this.data.cards;
-        // cards[cardidx].isUnfold = !cards[cardidx].isUnfold;
-        // this.setData({
-        //     cards
-        // })
-        let {
-            cardidx,
-            type
-        } = e.detail;
-        let data = this.data[type];
-        data[cardidx].isUnfold = !data[cardidx].isUnfold;
-        this.setData({
-            [type]: data
-        })
-    },
+    // unfoldTable (e) {
+    //     let {
+    //         cardidx,
+    //         type
+    //     } = e.detail;
+    //     let data = this.data[type];
+    //     data[cardidx].isUnfold = !data[cardidx].isUnfold;
+    //     this.setData({
+    //         [type]: data
+    //     })
+    // },
     // 计算总共价钱，在多选框改变时计算,改变cards
     computeTotalExpense (e) {
         let value = e.detail.value;
@@ -192,7 +155,7 @@ Page({
             let canPay = false;
             for (var i = 0; i < cards.length; i++) {
                 if (cards[i].checked) {
-                    total += cards[i].totalExpense;
+                    total = WX.add(total, cards[i].totalExpense);
                     canPay = true;
                 }
             }

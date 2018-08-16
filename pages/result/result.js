@@ -12,7 +12,9 @@ Page({
 		additionalMsg: '',
 		type: 0,
 		zyNo: '',
-		mzNo: ''
+		mzNo: '',
+		adFlag: false,
+		is_detail_skip: true // 是否查看详情
 	},
 
 	/**
@@ -77,7 +79,34 @@ Page({
 			this.setData({
 				resultMsg
 			})
-		} else { // 支付结果，不需要显示loading
+		} else if (+type && +status){
+			WX.request({
+				'url': '/Hospital/getIsOpenAdvert',
+				success: (resData) => {
+					let {
+						advert_is_open
+					} = resData;
+					this.setData({
+						adFlag: advert_is_open == '1' ? true : false
+					})
+					if (advert_is_open == '1') {
+						WX.request({
+							url: '/Hospital/getOpenAdvert',
+							success: (resData) => {
+								let {
+									is_detail_skip
+								} = resData;
+								this.setData({
+									is_detail_skip: is_detail_skip == 1 ? true : false
+								})
+							}
+						})
+					}
+				}
+			})
+		} else if (+type && !+status){
+			console.log('支付失败')
+		}else { // 支付结果，不需要显示loading
 			
 		}
 	},
