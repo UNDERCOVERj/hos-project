@@ -25,12 +25,9 @@
     justify-content: center; 
 }
 
-.bottom .bottom-ad-img {
+.bottom .bottom-ad-img image {
     width: 400rpx;
-    height: 500rpx;
-    /* height: auto; */
-    word-break: break-all;
-    word-wrap: break-word;
+    height: auto;
 }
 
 .bottom .bottom-detail {

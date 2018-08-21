@@ -94,10 +94,12 @@ Page({
 							url: '/Hospital/getOpenAdvert',
 							success: (resData) => {
 								let {
-									is_detail_skip
+									is_detail_skip,
+									cover_img
 								} = resData;
 								this.setData({
-									is_detail_skip: is_detail_skip == 1 ? true : false
+									is_detail_skip: is_detail_skip == 1 ? true : false,
+									cover_img
 								})
 							}
 						})

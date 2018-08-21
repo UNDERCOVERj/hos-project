@@ -1,8 +1,8 @@
 <!--pages/result/result.wxml-->
 <view class="result" wx:if="{{type || !status}}">
     <view class="top">
-        <image wx:if="{{status==1}}" src="../../assets/success_top.png"/>
-        <image wx:else src="../../assets/fail_top.png"/>
+        <image wx:if="{{status==1}}" src="../../assets/success_top.png"></image>
+        <image wx:else src="../../assets/fail_top.png"></image>
     </view>
     <view class="content">
         <view wx:if="resultMsg" class="result-msg">{{resultMsg}}</view>
@@ -12,7 +12,9 @@
         <image src="../../assets/fail_bottom.png" wx:if="{{status==0}}"/>
         <image src="../../assets/success_bottom.png" wx:elif="{{type==0 || type==1 && !adFlag}}"/>
         <view wx:elif="{{type==1 && adFlag}}" class="bottom-ad">
-            <view class="bottom-ad-img">占位占位广告广告</view>
+            <view class="bottom-ad-img">
+                <image src="{{cover_img}}" mode="widthFix"></image>
+            </view>
             <view class="bottom-detail" wx:if="is_detail_skip">查看详情</view>
         </view>
     </view>
