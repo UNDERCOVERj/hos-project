@@ -44,12 +44,6 @@ Component({
             this.setData({
                 componentCard
             }, this.changeCloneCard)
-
-            const params = {
-                cardidx: e.currentTarget.dataset.cardidx, 
-                type: this.data.type
-            }
-            // this.triggerEvent('custumevent', params)
         },
         changeCloneCard () { // 克隆一个card，以便于改变list数组
             const componentCard = this.data.componentCard;
@@ -63,19 +57,12 @@ Component({
         unfoldTableClassification (e) {
             const componentCards = this.data.componentCards;
             let {
-                cardidx, // 第几个卡片
                 _class // 分类
             } = e.currentTarget.dataset;
             componentCards[_class].isUnfold = !componentCards[_class].isUnfold;
             this.setData({
                 componentCards
             }, this.changeCloneCards)
-
-            const params = {
-                cardidx,
-                _class
-            }
-            // this.triggerEvent('custumevent', params)
         },
         changeCloneCards () {
 

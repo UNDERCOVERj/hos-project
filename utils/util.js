@@ -1,3 +1,6 @@
+const app = getApp();
+const prefixUrl = 'https://backend.wsyzyyjfzs.com';
+
 const formatTime = date => {
 	const year = date.getFullYear()
 	const month = date.getMonth() + 1
@@ -56,12 +59,13 @@ class CodeMap {
             // 订单
             '7000': '页码非法'
         }
+        this.whiteList = ['/User/setUserInfo'] // 为了检查有无数据
     }
-    checkCodeMap(code, data) {
+    checkCodeMap(code, data, url) {
         if (this.codeMap[code] && code == '200') {
             if (!data 
-                || (Array.isArray(data) && !data.length)) {
-                // || (typeof data == 'object' && !Object.keys(data).length)) {
+                || (Array.isArray(data) && !data.length) 
+                || (this.whiteList.indexOf(url) < 0 && typeof data == 'object' && !Object.keys(data).length)) {
 
                 return {
                     msg: '数据为空',
@@ -113,7 +117,7 @@ const strategy = {
             "created_time_date": "用户创建时间-日期格式化",
         }
 	},
-	'/User/createdUser': {
+	'/User/setUserInfo': {
         "code": 200,
         "info": "success",
         "data": {
@@ -529,7 +533,7 @@ const strategy = {
         }
     },
     // 获取住院费用清单
-    '/ThirdParty/getInpatientCostList':  {
+    '/ThirdParty/getInpatientCostList0':  {
         "code": 200,
         "message": "success",
         "data": {
@@ -547,6 +551,38 @@ const strategy = {
             "costList": {
                 1531385396859: {
                     "费用分类": {
+                        "category_name": "费用分类",
+                        "category_total_cost": "10000",
+                        "project_list": [
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },{
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            }
+                        ]
+                    },
+                    "费用分类2": {
                         "category_name": "费用分类",
                         "category_total_cost": "10000",
                         "project_list": [
@@ -704,6 +740,133 @@ const strategy = {
             }
         }
     },
+    // 获取住院费用清单
+    '/ThirdParty/getInpatientCostList1':  {
+        "code": 200,
+        "message": "success",
+        "data": {
+            "chargeTimeArr": {
+                1531385396859: "eejeijfo"
+            },
+            "patientInfo": {
+                "name": "病人姓名",
+                "admission_time_date": "入院时间(格式化)",
+                "total_cost": "总收费金额"
+            },
+            "costList": {
+                1531385396859: {
+                    "费用分类": {
+                        "category_name": "费用分类",
+                        "category_total_cost": "10000",
+                        "project_list": [
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },{
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            }
+                        ]
+                    },
+                    "费用分类2": {
+                        "category_name": "费用分类",
+                        "category_total_cost": "10000",
+                        "project_list": [
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },{
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },{
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            },
+                            {
+                                "project_name": "项目名称",
+                                "project_specifications": "项目规格",
+                                "project_unit": "项目单位",
+                                "project_unit_price": "项目单价",
+                                "project_num": "项目数量",
+                                "project_sum_price": "项目总费用",
+                                "charge_time": "收费时间(格式化)"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
     "/ThirdParty/getInpatientWaitPayList": {
         "code": 200,
         "message": "success",
@@ -731,6 +894,12 @@ const strategy = {
                     "1",
                     "2"
                 ]
+            },
+            {
+                "serial_number": "eeee",
+                "serial_number_list": [
+                    "1"
+                ]
             }
         ]
     },
@@ -738,7 +907,7 @@ const strategy = {
         "code": 200,
         "info": "success",
         "data":{
-            "is_allow_single_pay": "0"
+            "is_allow_single_pay": "1"
         }
     },
     // 获取是否广告
@@ -761,6 +930,17 @@ const strategy = {
             "is_allow_save_contacts":"是否允许用户留存信息",
             "advert_detail":"广告详情"
         }
+    },
+    '/Order/addOutpatientOrder': {
+        'code': 200,
+        "info": "success",
+        "data": {
+            // timeStamp: 1,
+            // nonceStr: 2,
+            // package: 2,
+            // signType: 3,
+            // paySign: 4
+        }
     }
 }
 
@@ -770,9 +950,6 @@ class Request extends CodeMap{
         this.loadingFlag = false;
     }
     request (url, resolve, reject) {
-        console.log(strategy)
-        console.log(url)
-        console.log(strategy[url])
         let {
             data,
             code
@@ -780,7 +957,7 @@ class Request extends CodeMap{
         let {
             msg,
             error_no // 1 错 0 继续
-        } = this.checkCodeMap(code, data);
+        } = this.checkCodeMap(code, data, url);
         let resData = {
             data,
             code
@@ -798,11 +975,50 @@ class Request extends CodeMap{
             mask: true
         })
         return new Promise((resolve, reject) => {
-            try {
+            // try {
                 setTimeout(() => this.request(url, resolve, reject), 500)
-            } catch (e) {
-                reject('请求错误')
-            }
+                // const requestTask = wx.request({
+                //     url: `${prefixUrl}${url}`,
+                //     header: {
+                //         'content-type': 'application/json'
+                //     },
+                //     data: {
+                //         ...data, 
+                //         hospita_unique_id: app.globalData.hospitalId
+                //     },
+                //     method: 'POST',
+                //     success: (res) => {
+                //         let {
+                //             statusCode
+                //         }
+                //         if (statusCode != 200) {
+                //             reject(statusCode);
+                //             return;
+                //         }
+                //         let {
+                //             data,
+                //             code
+                //         } = res.data;
+                //         let {
+                //             msg,
+                //             error_no // 1 错 0 继续
+                //         } = this.checkCodeMap(code, data);
+                //         let resData = {
+                //             data,
+                //             code
+                //         }
+                //         if (!error_no) {
+                //             resolve(resData)
+                //         } else {
+                //             reject(msg);
+                //         }
+                //     },
+                //     fail: (err) => reject(err)
+                // })
+                // setTimeout(() => {requestTask.abort()}, 1000)
+            // } catch (e) {
+            //     reject('请求错误')
+            // }
             
         })
         .then((resData) => {
@@ -810,7 +1026,8 @@ class Request extends CodeMap{
             wx.hideLoading();
             success && success(resData.data)
         })
-        .catch((msg = '') => {
+        .catch((err = '') => {
+            let msg = typeof err == 'object' ? err.errMsg : err;
             wx.showToast({
                 title: msg,
                 icon: 'loading',

@@ -4,7 +4,8 @@
     "pages/outpatient/outpatient",
     "pages/inhospital/inhospital",
     "pages/result/result",
-    "pages/history/history"
+    "pages/history/history",
+    "pages/advertisement/advertisement"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -17,7 +17,7 @@
 				<view class="list">
 					<view class="list-title">
 						<label>
-							<checkbox value="{{cardidx}}" checked="{{canSelect ? false : true}}" disabled="{{!canSelect}}" />
+							<checkbox value="{{cardidx}}" checked="{{card.checked}}" disabled="{{!canSelect}}" />
 							<view>单据号：{{card.billId}}</view>
 						</label>
 						<view class="list-title-time">
@@ -30,6 +30,6 @@
 	</checkbox-group>
 	<view class="pay-footer">
 		<view class="pay-footer-num">总计：<text>{{totalExpense}}</text></view>
-		<view class="pay-footer-btn" style="background-color: {{canPay ? '#2e82ff' : '#cccccc'}}">微信支付</view>
+		<view class="pay-footer-btn" style="background-color: {{canPay ? '#2e82ff' : '#cccccc'}}" bindtap="handlePayment">微信支付</view>
 	</view>
 </view>

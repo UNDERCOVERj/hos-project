@@ -145,7 +145,7 @@ Page({
             gender
         } = this.data.userInfo;
         WX.request.call(this, {
-            url: '/User/createdUser',
+            url: '/User/setUserInfo',
             data: {
                 user_name: nickName,
                 head_img: avatarUrl,

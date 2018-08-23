@@ -45,8 +45,8 @@
 		</view>
 		<view class="list-footer">
 			<view class="list-footer-isUnfold" bindtap="unfoldTableClassification" data-_class="{{_class}}" data-classidx="{{classidx}}" data-cardidx="{{cardidx}}" wx:if="{{componentCards[_class].list.length > size}}">
-				<view class="list-footer-isUnfold-block list-footer-isUnfold-small" style="transform:rotate({{componentCard.isUnfold ? 135 : -45}}deg)"></view>
-				<view class="list-footer-isUnfold-block list-footer-isUnfold-big" style="transform:rotate({{componentCard.isUnfold ? 135 : -45}}deg)"></view>
+				<view class="list-footer-isUnfold-block list-footer-isUnfold-small" style="transform:rotate({{cloneCards[_class].isUnfold === true ? 135 : -45}}deg)"></view>
+				<view class="list-footer-isUnfold-block list-footer-isUnfold-big" style="transform:rotate({{cloneCards[_class].isUnfold === true ? 135 : -45}}deg)"></view>
 			</view>
 			<view class="list-footer-total">
 				合计：<text>￥{{componentCards[_class].totalExpense}}</text>

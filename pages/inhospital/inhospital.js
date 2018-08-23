@@ -75,9 +75,55 @@ Page({
     },
     // 支付
     handlePayment () {
-        if (this.data.canPay) {
-            wx.navigateTo({
-                url: `/pages/result/result?type=1&status=1`
+        let {
+            canPay,
+            zyTimes,
+            zyNo,
+            totalAmount
+        } = this.data;
+        if (canPay) {
+            // wx.navigateTo({
+            //     url: `/pages/result/result?type=1&status=1&resultMsg=支付成功`
+            // })
+            let data = {
+                inpatient_number: zyNo,
+                serial_number: zyTimes,
+                mini_open_id: wx.getStorageSync('mini_open_id'),
+                pay_money: totalAmount
+            }
+            WX.request({
+                url: '/Order/addInpatientOrder',
+                data,
+                success: (resData) => {
+                    let {
+                        timeStamp,
+                        nonceStr,
+                        package: _package,
+                        signType,
+                        paySign 
+                    } = resData;
+                    wx.requestPayment({
+                        timeStamp,
+                        nonceStr,
+                        package: _package,
+                        signType,
+                        paySign,
+                        success: () => {
+                            wx.showToast({
+                                title: '支付成功',
+                                icon: 'success',
+                                duration: 1000,
+                                complete: () => {
+                                    wx.navigateTo({
+                                        url: `/pages/result/result?type=1&status=1&resultMsg=支付成功`
+                                    })
+                                }
+                            })
+                        },
+                        fail: this.failHandeler
+                    })
+                },
+                fail: this.failHandeler
             })
         } else {
             wx.navigateTo({

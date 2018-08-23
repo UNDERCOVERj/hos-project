@@ -50,9 +50,10 @@ Page({
 							url: `/pages/outpatient/outpatient?mzNo=${mzNo}`
 						})
 					},
-					fail: () => {
+					fail: (resultMsg) => {
 						this.setData({
-							status: 0
+							status: 0,
+							resultMsg: '扫码失败'
 						})
 					}
 				})
@@ -68,9 +69,10 @@ Page({
 							url: `/pages/inhospital/inhospital?zyNo=${zyNo}&zyTimes=${zyTimes}`
 						})
 					},
-					fail: () => {
+					fail: (resultMsg) => {
 						this.setData({
-							status: 0
+							status: 0,
+							resultMsg: '扫码失败'
 						})
 					}
 				})
@@ -79,7 +81,7 @@ Page({
 			this.setData({
 				resultMsg
 			})
-		} else if (+type && +status){
+		} else if (+type && +status){ // 支付成功
 			WX.request({
 				'url': '/Hospital/getIsOpenAdvert',
 				success: (resData) => {
@@ -108,57 +110,8 @@ Page({
 			})
 		} else if (+type && !+status){
 			console.log('支付失败')
-		}else { // 支付结果，不需要显示loading
+		} else { // 支付结果，不需要显示loading
 			
 		}
-	},
-
-	/**
-	 * 生命周期函数--监听页面初次渲染完成
-	 */
-	onReady: function () {
-
-	},
-
-	/**
-	 * 生命周期函数--监听页面显示
-	 */
-	onShow: function () {
-
-	},
-
-	/**
-	 * 生命周期函数--监听页面隐藏
-	 */
-	onHide: function () {
-
-	},
-
-	/**
-	 * 生命周期函数--监听页面卸载
-	 */
-	onUnload: function () {
-
-	},
-
-	/**
-	 * 页面相关事件处理函数--监听用户下拉动作
-	 */
-	onPullDownRefresh: function () {
-
-	},
-
-	/**
-	 * 页面上拉触底事件的处理函数
-	 */
-	onReachBottom: function () {
-
-	},
-
-	/**
-	 * 用户点击右上角分享
-	 */
-	onShareAppMessage: function () {
-
 	}
 })

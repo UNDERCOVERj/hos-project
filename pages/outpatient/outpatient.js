@@ -51,91 +51,77 @@ Page({
     /**
     * 生命周期函数--监听页面加载
     */
-    onLoad: function ({zyNo, zyTimes} = {zyNo: 0, zyTimes: 0}) {
-
-        
+    onLoad: function (options) {
+        let {mzNo} = options;
 
         WX.request({
-            url: '/ThirdParty/getOutpatientWaitPayList',
+            url: '/Hospital/getIsSinglePay',
             success: (resData) => {
                 let {
-                    mzh,
-                    brid,
-                    brxm,
-                    dj_list // object
+                    is_allow_single_pay
                 } = resData;
-                let cards = []
-                Object.keys(dj_list).forEach((key) => {
-                    let list = dj_list[key];
-                    let {
-                        no,
-                        hjsj_time,
-                        sfxm_list // arr
-                    } = list;
-                    let card = {
-                        checked: false,
-                        isUnfold: false,
-                        billId: no,
-                        time: hjsj_time,
-                        totalExpense: 0,
-                        list: []
-                    }
-                    card.list = sfxm_list.map((list_item) => {
-                        let {   
-                            sfxm,
-                            xmdj,
-                            xmsl,
-                            xmfyxj
-                        } = list_item;
-                        card.totalExpense = WX.add(card.totalExpense, xmfyxj);
-                        return { 
-                            project: sfxm,
-                            price: xmdj,
-                            quantity: xmsl,
-                            amount: xmfyxj
-                        }
-                    })
-                    cards.push(card)
-                })
-                this.setData({
-                    cards,
-                    outpatientId: mzh,
-                    name: brxm
-                })
                 WX.request({
-                    url: '/Hospital/getIsSinglePay',
+                    url: '/ThirdParty/getOutpatientWaitPayList',
                     success: (resData) => {
+                        
+
                         let {
-                            is_allow_single_pay
+                            mzh,
+                            brid,
+                            brxm,
+                            dj_list // object
                         } = resData;
-                        if (is_allow_single_pay == '1') {
-                            this.setData({
-                                canSelect: true
+                        let cards = []
+                        Object.keys(dj_list).forEach((key) => {
+                            let list = dj_list[key];
+                            let {
+                                no,
+                                hjsj_time,
+                                sfxm_list // arr
+                            } = list;
+                            let card = {
+                                checked: is_allow_single_pay == '1' ? false : true,
+                                isUnfold: false,
+                                billId: no,
+                                time: hjsj_time,
+                                totalExpense: 0,
+                                list: []
+                            }
+                            card.list = sfxm_list.map((list_item) => {
+                                let {   
+                                    sfxm,
+                                    xmdj,
+                                    xmsl,
+                                    xmfyxj
+                                } = list_item;
+                                card.totalExpense = WX.add(card.totalExpense, xmfyxj);
+                                return { 
+                                    project: sfxm,
+                                    price: xmdj,
+                                    quantity: xmsl,
+                                    amount: xmfyxj
+                                }
                             })
-                        } else {
-                            let totalExpense = cards.reduce((total, val, idx) => (total = WX.add(total, val.totalExpense)), 0);
-                            this.setData({
-                                totalExpense: totalExpense,
-                                canPay: totalExpense ? true : false
-                            })
-                        }
+                            cards.push(card)
+                        })
+
+                        let totalExpense = cards.reduce((total, val, idx) => (total = WX.add(total, val.checked ? val.totalExpense : 0)), 0);
+
+                        this.setData({
+                            totalExpense: totalExpense,
+                            canPay: totalExpense ? true : false,
+                            canSelect: is_allow_single_pay == '1' ? true : false,
+                            cards,
+                            outpatientId: mzh,
+                            name: brxm,
+                            mzNo
+                        })
                     }
                 })
             }
         })
+        
     },
-    // 组件里改变isUnfold，需要在父组件同步改变
-    // unfoldTable (e) {
-    //     let {
-    //         cardidx,
-    //         type
-    //     } = e.detail;
-    //     let data = this.data[type];
-    //     data[cardidx].isUnfold = !data[cardidx].isUnfold;
-    //     this.setData({
-    //         [type]: data
-    //     })
-    // },
     // 计算总共价钱，在多选框改变时计算,改变cards
     computeTotalExpense (e) {
         let value = e.detail.value;
@@ -163,6 +149,70 @@ Page({
                 totalExpense: total,
                 canPay
             })
+        })
+    },
+    handlePayment() {
+        let {
+            canPay,
+            cards,
+            outpatientId
+        } = this.data;
+
+        let bill_number_arr = cards.map((item) => item.checked ? item.billId : '');
+
+        if (canPay) {
+            let data = {
+                mini_open_id: wx.getStorageSync('mini_open_id'),
+                outpatient_number: outpatientId,
+                bill_number: bill_number_arr.join(',')
+            }
+            // 吊起微信支付
+            WX.request({
+                url: '/Order/addOutpatientOrder',
+                data,
+                success: (resData) => {
+                    let {
+                        timeStamp,
+                        nonceStr,
+                        package: _package,
+                        signType,
+                        paySign 
+                    } = resData;
+                    wx.requestPayment({
+                        timeStamp,
+                        nonceStr,
+                        package: _package,
+                        signType,
+                        paySign,
+                        success: () => {
+                            wx.showToast({
+                                title: '支付成功',
+                                icon: 'success',
+                                duration: 1000,
+                                complete: () => {
+                                    wx.navigateTo({
+                                        url: `/pages/result/result?type=1&status=1&resultMsg=支付成功`
+                                    })
+                                }
+                            })
+                        },
+                        fail: this.failHandeler
+                    })
+                },
+                fail: this.failHandeler
+            })
+        }
+    },
+    failHandeler () {
+        wx.showToast({
+            title: '支付失败',
+            icon: 'none',
+            duration: 1000,
+            complete: () => {
+                wx.navigateTo({
+                    url: `/pages/result/result?type=1&status=0&resultMsg=支付失败`
+                })
+            }
         })
     }
 })

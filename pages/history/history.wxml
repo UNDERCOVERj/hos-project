@@ -91,12 +91,12 @@
 			</view>
 			<view class="card">
 				<view class="list">
-					<view class="list-title" bindtap="showModal">
-						<view class="list-title-label">
-							<text>查看日期</text>
+					<view class="list-title" bindtap="showModal" data-curPickerView="{{idx}}">
+						<view class="list-title-label" data-curPickerView="{{idx}}">
+							<text data-curPickerView="{{idx}}">查看日期</text>
 						</view>
 						<view class="list-title-billId" data-curPickerView="{{idx}}">
-							{{priceDate}}<view class="list-title-billId-icon"></view>
+							{{item.priceDate}}<view class="list-title-billId-icon"  data-curPickerView="{{idx}}"></view>
 						</view>
 					</view>
 					<component-table id="table" type="inhospitalBills" card="{{item.card}}" cardidx="{{idx}}" bindcustumevent="unfoldTable" classification="1"></component-table>
@@ -111,18 +111,18 @@
 	            <text>选择查看日期</text>
 	        </view>
 	        <view class="content">
-				<picker-view indicator-style="height: 50px;" class="picker-view" value="{{pickerViewValue}}" bindchange="bindChange">
+				<picker-view indicator-style="height: 50px;" class="picker-view" value="{{inhospitalBills[curPickerView].pickerViewValue}}" bindchange="bindChange">
 					<picker-view-column>
-						<view wx:for="{{years}}" wx:for-index="yearidx" wx:key="{{yearidx}}" class="picker-view-column">{{item}}年</view>
+						<view wx:for="{{inhospitalBills[curPickerView].years}}" wx:for-index="yearidx" wx:key="{{yearidx}}" class="picker-view-column">{{item}}年</view>
 					</picker-view-column>
 					<picker-view-column>
-						<view wx:for="{{months}}" wx:for-index="monthidx" wx:key="{{monthidx}}" class="picker-view-column">{{item}}月</view>
+						<view wx:for="{{inhospitalBills[curPickerView].months}}" wx:for-index="monthidx" wx:key="{{monthidx}}" class="picker-view-column">{{item}}月</view>
 					</picker-view-column>
 					<picker-view-column>
-						<view wx:for="{{days}}" wx:for-index="dayidx" wx:key="{{dayidx}}" class="picker-view-column">{{item}}日</view>
+						<view wx:for="{{inhospitalBills[curPickerView].days}}" wx:for-index="dayidx" wx:key="{{dayidx}}" class="picker-view-column">{{item}}日</view>
 					</picker-view-column>
 					<picker-view-column>
-						<view wx:for="{{prices}}" wx:key="{{priceidx}}" wx:for-index="priceidx" class="picker-view-column picker-view-column-highlight">￥{{item}}</view>
+						<view wx:for="{{inhospitalBills[curPickerView].prices}}" wx:key="{{priceidx}}" wx:for-index="priceidx" class="picker-view-column picker-view-column-highlight">￥{{item}}</view>
 					</picker-view-column>		
 				</picker-view>
 	        </view>

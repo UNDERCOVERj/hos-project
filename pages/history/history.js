@@ -25,20 +25,7 @@ Page({
         inhospitalId: [0],
         // 结合下面两个去请求
         inhospitalIdIndex: 0,// 第几个
-        inhospitalIdToRequest: 0, // 第几次去请求
-        // 日期选择四列
-        years: [],
-        months: [],
-        days: [],
-        prices: [],
-        chargeTime: [],
-        curPickerView: 0, // 表示第几个inhospitalBills的索引
-        curYear: 0, // 表示years数组的选中项
-        curMonth: 0, // 表示months数组的选中项
-        curDay: 0, // 表示days数组的选中项
-        curPrice: 0, // 表示prices数组的选中项
-        pickerViewValue: [0, 0, 0, 0],
-        pickerViewHiddenFlag: true,
+        pickerViewHiddenFlag: true, // 日趋选择
         inhospitalIdHiddenFlag: true, // 住院次数选择
         outpatientBills: [],
         // outpatientBills: [ // 门诊账单，没有时为null/空数组
@@ -206,61 +193,15 @@ Page({
     //     })
     // },
     // 初始化picker-view所需日期数据
-    initialPickerViewData () {
+    initialPickerViewData (flag) { // flag表明是不是第一次
         const data = this.data;
 
         let {
             inhospitalBills,
-            curPickerView,
-            curYear,
-            curMonth,
-            curDay,
-            curPrice
+            curPickerView
         } = data;
 
-        const priceInfo = inhospitalBills[curPickerView]['priceInfo'];
-
-        if (!priceInfo.length) return;
-        const tempMonths = priceInfo[priceInfo.length - 1]['months']; // 临时months
-
-        const years = priceInfo.map((years) => years['year']);
-        const months = tempMonths.map((months) => months['month']);
-        const days = tempMonths[tempMonths.length - 1]['days'].map(days => days['day']);
-        const prices = tempMonths[tempMonths.length - 1]['days'].map(days => days['price']);
-        const chargeTime = tempMonths[tempMonths.length - 1]['days'].map(days => days['chargeTime']);
-
-        curYear = years.length - 1;
-        curMonth = months.length - 1;
-        curDay = days.length - 1;
-        curPrice = prices.length -1;
-        this.setData({
-            curYear,
-            curMonth,
-            curDay,
-            curPrice,
-            years,
-            months,
-            days,
-            prices,
-            pickerViewValue: [curYear, curMonth, curDay, curPrice],
-            chargeTime, // 切换时切换chargeTime
-            priceDate: [years[curYear], months[curMonth], days[curDay]].join('-')
-        })
-    },
-    // 处理picker 的change事件
-    bindChange (e) {
-        let value = e.detail.value;
-        const data = this.data;
-        let [
-            tempCurYear,
-            tempCurMonth,
-            tempCurDay,
-            tempCurPrice
-        ] = value;
-
         let {
-            inhospitalBills,
-            curPickerView,
             curYear,
             curMonth,
             curDay,
@@ -270,7 +211,77 @@ Page({
             days,
             prices,
             chargeTime
+        } = inhospitalBills[curPickerView]
+
+        const priceInfo = inhospitalBills[curPickerView]['priceInfo'];
+        
+        if (!priceInfo.length) return;
+
+        let tempMonths;
+
+        // 初次显示最后一条
+        if (!inhospitalBills[curPickerView].showFlag) {
+            tempMonths = priceInfo[priceInfo.length - 1]['months']; // 临时months
+            years = priceInfo.map((years) => years['year']);
+            months = tempMonths.map((months) => months['month']);
+            days = tempMonths[tempMonths.length - 1]['days'].map(days => days['day']);
+            prices = tempMonths[tempMonths.length - 1]['days'].map(days => days['price']);
+            chargeTime = tempMonths[tempMonths.length - 1]['days'].map(days => days['chargeTime']);
+            curYear = years.length - 1;
+            curMonth = months.length - 1;
+            curDay = days.length - 1;
+            curPrice = prices.length -1;
+        } else {
+            tempMonths = priceInfo[curYear]['months']; // 临时months
+            years = priceInfo.map((years) => years['year']);
+            months = tempMonths.map((months) => months['month']);
+            days = tempMonths[curMonth]['days'].map(days => days['day']);
+            prices = tempMonths[curMonth]['days'].map(days => days['price']);
+            chargeTime = tempMonths[curMonth]['days'].map(days => days['chargeTime']);
+        }
+
+        this.setData({
+            ["inhospitalBills[" + curPickerView + "].curYear"]: curYear,
+            ["inhospitalBills[" + curPickerView + "].curMonth"]: curMonth,
+            ["inhospitalBills[" + curPickerView + "].curDay"]: curDay,
+            ["inhospitalBills[" + curPickerView + "].curPrice"]: curPrice,
+            ["inhospitalBills[" + curPickerView + "].years"]: years,
+            ["inhospitalBills[" + curPickerView + "].months"]: months,
+            ["inhospitalBills[" + curPickerView + "].days"]: days,
+            ["inhospitalBills[" + curPickerView + "].prices"]: prices,
+            ["inhospitalBills[" + curPickerView + "].pickerViewValue"]: [curYear, curMonth, curDay, curPrice],
+            pickerViewHiddenFlag: false,
+            ["inhospitalBills[" + curPickerView + "].chargeTime"]: chargeTime, // 切换时切换chargeTime
+            ["inhospitalBills[" + curPickerView + "].priceDate"]: [years[curYear], months[curMonth], days[curDay]].join('-'),
+            ["inhospitalBills[" + curPickerView + "].showFlag"]: true
+        })
+    },
+    // 处理picker 的change事件
+    bindChange (e) {
+        let value = e.detail.value;
+        const data = this.data;
+        let {
+            inhospitalBills,
+            curPickerView
         } = data;
+        let [
+            tempCurYear,
+            tempCurMonth,
+            tempCurDay,
+            tempCurPrice
+        ] = value;
+
+        let {
+            curYear,
+            curMonth,
+            curDay,
+            curPrice,
+            years,
+            months,
+            days,
+            prices,
+            chargeTime
+        } = inhospitalBills[curPickerView];
 
         const priceInfo = inhospitalBills[curPickerView]['priceInfo'];
 
@@ -299,26 +310,27 @@ Page({
             curPrice = curDay = tempCurDay !== curDay ? tempCurDay: tempCurPrice; // 同时改变
         }
         this.setData({
-            curYear,
-            curMonth,
-            curDay,
-            curPrice,
-            years,
-            months,
-            days,
-            prices,
-            chargeTime,
-            pickerViewValue: [curYear, curMonth, curDay, curPrice],
-            priceDate: [years[curYear], months[curMonth], days[curDay]].join('-')
+            ["inhospitalBills[" + curPickerView + "].curYear"]: curYear,
+            ["inhospitalBills[" + curPickerView + "].curMonth"]: curMonth,
+            ["inhospitalBills[" + curPickerView + "].curDay"]: curDay,
+            ["inhospitalBills[" + curPickerView + "].curPrice"]: curPrice,
+            ["inhospitalBills[" + curPickerView + "].years"]: years,
+            ["inhospitalBills[" + curPickerView + "].months"]: months,
+            ["inhospitalBills[" + curPickerView + "].days"]: days,
+            ["inhospitalBills[" + curPickerView + "].prices"]: prices,
+            ["inhospitalBills[" + curPickerView + "].pickerViewValue"]: [curYear, curMonth, curDay, curPrice],
+            ["inhospitalBills[" + curPickerView + "].chargeTime"]: chargeTime, // 切换时切换chargeTime
+            ["inhospitalBills[" + curPickerView + "].priceDate"] : [years[curYear], months[curMonth], days[curDay]].join('-')
         })
     },
     // 显示蒙层，传入pickerView所需的日期数据,根据索引来查找日期数据，并重新initial
     showModal (e) {
-        const curPickerView = e.currentTarget.dataset.curPickerView || 0;
+        const curPickerView = e.currentTarget.dataset.curpickerview || 0; // 必须小写了
         this.setData({
-            curPickerView,
-            pickerViewHiddenFlag: false
-        })
+            // inhospitalIdIndex: curPickerView, // 第几个大卡片
+            serial_number_list: this.data.inhospitalIds[curPickerView].serial_number_list, // 第几个大卡片的serial_number_list
+            curPickerView: curPickerView, // 第几个大卡片的时间表
+        }, this.initialPickerViewData)
     },
     // 隐藏蒙层
     cancelModal () {
@@ -329,11 +341,14 @@ Page({
     // 确认改变蒙层
     confirmModal () {
         let {
-            chargeTime,
-            curPrice,
+            curPickerView,
             inhospitalBills,
-            costList
         } = this.data;
+        let {
+            costList,
+            chargeTime,
+            curPrice
+        } = inhospitalBills[curPickerView]
         let cloneCards = JSON.parse(JSON.stringify(inhospitalBills));
         cloneCards[0].card = this.getCard(chargeTime[curPrice], costList);
         this.setData({
@@ -351,6 +366,11 @@ Page({
             if (this.data.outpatientBills && this.data.outpatientBills.length) return;
             WX.request({
                 url: '/Order/getOutpatientOrderList',
+                data: {
+                    mini_open_id: wx.getStorageSync('mini_open_id'),
+                    page_size: 100,
+                    page_num: 1
+                },
                 success: (resData) => {
                     let list = resData.list;
                     let outpatientBills = [];
@@ -365,7 +385,6 @@ Page({
                             outpatientId: outpatient_number,
                             billId: bill_number,
                             totalExpense: real_money,
-                            isUnfold: false,
                             list: []
                         };
                         item.list = project_list.map((item) => {
@@ -393,6 +412,11 @@ Page({
             if (this.data.inhospitalDeposit && this.data.inhospitalDeposit.length) return;
             WX.request({
                 url: '/Order/getInpatientOrderList',
+                data: {
+                    mini_open_id: wx.getStorageSync('mini_open_id'),
+                    page_size: 100,
+                    page_num: 1
+                },
                 success: (resData) => {
                     let list = resData.list;
                     let inhospitalDeposit = [];
@@ -420,24 +444,116 @@ Page({
             if (this.data.inhospitalBills && this.data.inhospitalBills.length) return;
             WX.request({
                 url: '/Order/getInpatientNoAndTimeList',
+                data: {
+                    mini_open_id: wx.getStorageSync('mini_open_id')
+                },
                 success: (resData) => {
                     this.setData({
                         inhospitalIds: resData.map(item => ({...item, curInhospitalIndex: 0})),
-                        inhospitalIdIndex: 0,
-                        inhospitalIdToRequest: resData[0].serial_number_list[0]
-                    }, this.getInpationetNoAndTimeList)
+                        curPickerView: 0
+                    }, this.getInpationetNoAndTimeLists) // 首次进入，多个卡片，包含住院号的
                 }
             })
             
         }
     },
-    getInpationetNoAndTimeList () {
+    getInpationetNoAndTimeLists() {
         let {
-            inhospitalIdIndex,
-            inhospitalIdToRequest
+            inhospitalIds
+        } = this.data;
+        let keys = inhospitalIds.map((item, idx) => {
+            let data = {
+                zyNo: item.serial_number,
+                zyTimes: item.serial_number_list[item.curInhospitalIndex]
+            };
+            return new Promise((resolve, reject) => {
+                WX.request({
+                    url: '/ThirdParty/getInpatientCostList' + idx,
+                    data,
+                    success: (resData) => {
+                        resolve(resData);
+                    },
+                    fail: (err) => {
+                        reject(err);
+                    }
+                })
+            })
+        })
+        Promise.all(keys)
+            .then(res => {
+                let inhospitalBills = [];
+                res.forEach((resData) => {
+                    let {
+                        chargeTimeArr,
+                        patientInfo,
+                        costList
+                    } = resData;
+                    // 改变 chargeTimeArr： time：price
+
+                    // 初次选择了的日期
+                    let tempChargeTimeArr = Object.keys(chargeTimeArr);
+                    tempChargeTimeArr.sort((prev, now) => +prev > +now);
+                    let initialPriceDate = new Date(+tempChargeTimeArr[tempChargeTimeArr.length - 1]);
+                    let priceDate = initialPriceDate.getFullYear() 
+                                    + '-' 
+                                    + (initialPriceDate.getMonth() + 1)
+                                    + '-' 
+                                    + initialPriceDate.getDate();
+
+                    let chargeTimes = {}; // 对应时间戳的各个分类的总价
+                    Object.keys(chargeTimeArr).forEach(time => {
+                        let total = 0;
+                        Object.keys(costList[time]).forEach(item => {
+                            total += +costList[time][item].category_total_cost;
+                        })
+                        chargeTimes[time] = total;
+                    })
+    
+                    let {
+                        name,
+                        admission_time_date,
+                        total_cost
+                    } = patientInfo;
+                    let inhospitalBill = {
+                        showFlag: false, // 表示还没有触发modal，这个在之后会改变
+                        name,
+                        years: [],
+                        months: [],
+                        days: [],
+                        prices: [],
+                        chargeTime: [],
+                        curYear: 0, // 表示years数组的选中项
+                        curMonth: 0, // 表示months数组的选中项
+                        curDay: 0, // 表示days数组的选中项
+                        curPrice: 0, // 表示prices数组的选中项
+                        pickerViewValue: [0, 0, 0, 0],
+                        priceDate, 
+                        date: admission_time_date,
+                        totalExpense: total_cost,
+                        costList,
+                        priceInfo: this.getPriceInfo(chargeTimes) || [],
+                        card: this.getCard(Object.keys(chargeTimeArr)[0], costList)
+                    }
+                    inhospitalBills.push(inhospitalBill)
+                })
+                this.setData({inhospitalBills, costList: inhospitalBills[0].card})
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    },
+    getInpationetNoAndTimeList() {
+        let {
+            curPickerView,
+            inhospitalId,
+            inhospitalIds
         } = this.data
         WX.request({
-            url: '/ThirdParty/getInpatientCostList',
+            url: '/ThirdParty/getInpatientCostList' + (inhospitalIds[curPickerView].serial_number_list[inhospitalId[0]] - 1),
+            data: {
+                zyNo: inhospitalIds[curPickerView].serial_number, // error
+                zyTimes: inhospitalIds[curPickerView].serial_number_list[inhospitalId[0]]
+            },
             success: (resData) => {
                 let {
                     chargeTimeArr,
@@ -446,7 +562,17 @@ Page({
                 } = resData;
                 // 改变 chargeTimeArr： time：price
 
-                let chargeTimes = {};
+                // 初次选择了的日期
+                let tempChargeTimeArr = Object.keys(chargeTimeArr);
+                tempChargeTimeArr.sort((prev, now) => +prev > +now);
+                let initialPriceDate = new Date(+tempChargeTimeArr[tempChargeTimeArr.length - 1]);
+                let priceDate = initialPriceDate.getFullYear() 
+                                + '-' 
+                                + (initialPriceDate.getMonth() + 1)
+                                + '-' 
+                                + initialPriceDate.getDate();
+
+                let chargeTimes = {}; // 对应时间戳的各个分类的总价
                 Object.keys(chargeTimeArr).forEach(time => {
                     let total = 0;
                     Object.keys(costList[time]).forEach(item => {
@@ -460,18 +586,33 @@ Page({
                     admission_time_date,
                     total_cost
                 } = patientInfo;
-
-                let inhospitalBills = [];
                 let inhospitalBill = {
                     // inhospitalId: 'zy1245',
+                    showFlag: false, // 表示还没有触发modal，这个在之后会改变
                     name,
+                    years: [],
+                    months: [],
+                    days: [],
+                    prices: [],
+                    chargeTime: [],
+                    // curPickerView: 0, // 表示第几个inhospitalBills的索引
+                    curYear: 0, // 表示years数组的选中项
+                    curMonth: 0, // 表示months数组的选中项
+                    curDay: 0, // 表示days数组的选中项
+                    curPrice: 0, // 表示prices数组的选中项
+                    pickerViewValue: [0, 0, 0, 0],
+                    priceDate, 
                     date: admission_time_date,
                     totalExpense: total_cost,
+                    costList,
                     priceInfo: this.getPriceInfo(chargeTimes) || [],
                     card: this.getCard(Object.keys(chargeTimeArr)[0], costList)
                 }
-                inhospitalBills.push(inhospitalBill)
-                this.setData({inhospitalBills, costList}, this.initialPickerViewData)
+                this.setData({
+                    ["inhospitalBills[" + curPickerView + "]"]: inhospitalBill
+                }, () =>  {
+                    this.selectComponent('#table')._ready()
+                })
             }
         })
     },
@@ -488,7 +629,6 @@ Page({
             } = item
             returnCard[_class] = {
                 totalExpense: category_total_cost,
-                isUnfold: false,
                 list: project_list.map((project) => ({
                     project: project.project_name,
                     price: project.project_unit_price,
@@ -554,8 +694,8 @@ Page({
     showInhospitalModal (e) { // 改变第几个inhospitalIds
         let idx = e.target.dataset.idx;
         this.setData({
-            inhospitalIdIndex: idx, // 第几个
-            serial_number_list: this.data.inhospitalIds[idx].serial_number_list,
+            serial_number_list: this.data.inhospitalIds[idx].serial_number_list, // 第几个大卡片的serial_number_list
+            curPickerView: idx, // 第几个大卡片的时间表
             inhospitalIdHiddenFlag: false
         })
     },
@@ -565,12 +705,10 @@ Page({
         ] = e.detail.value;
         let {
             inhospitalIds,
-            inhospitalIdIndex
+            curPickerView
         } = this.data;
-        let nextTime = inhospitalIds[inhospitalIdIndex].serial_number_list[idx];
         this.setData({
-            inhospitalId: [idx],
-            inhospitalIdToRequest: nextTime
+            inhospitalId: [idx]
         })
 
     },
@@ -578,11 +716,8 @@ Page({
 
         this.setData({
             inhospitalIdHiddenFlag: true,
-            ["inhospitalIds[" + this.data.inhospitalIdIndex +"].curInhospitalIndex"]: this.data.inhospitalId,
-            inhospitalBills: [] // 避免不重新绘制
-        })
-
-        this.getInpationetNoAndTimeList();
+            ["inhospitalIds[" + this.data.curPickerView +"].curInhospitalIndex"]: this.data.inhospitalId[0],
+        }, this.getInpationetNoAndTimeList)
     },
     cancelInhospitalIdModal () {
         this.setData({
