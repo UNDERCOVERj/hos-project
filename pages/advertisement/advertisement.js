@@ -1,5 +1,6 @@
 // pages/advertisement/advertisement.js
 var WxParse = require('../wxParse/wxParse.js');
+const WX = require('../../utils/util.js');
 
 Page({
 
@@ -14,8 +15,23 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad: function (options) {
-		var article = '<div>我是HTML代码</div>';
-		WxParse.wxParse('article', 'html', article, this);
+
+		WX.request({
+			url: '/Hospital/getOpenAdvert',
+			success: (resData) => {
+				let {
+					is_allow_save_contacts,
+					advert_detail,
+					id: advert_id
+				} = resData;
+
+				WxParse.wxParse('ad_detail', 'html', advert_detail, this);
+				this.setData({
+					is_allow_save_contacts: is_allow_save_contacts == 1 ? true : false,
+					advert_id
+				})
+			}
+		})
 	},
 
 	/**

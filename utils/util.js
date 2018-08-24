@@ -59,7 +59,7 @@ class CodeMap {
             // 订单
             '7000': '页码非法'
         }
-        this.whiteList = ['/User/setUserInfo'] // 为了检查有无数据
+        this.whiteList = ['/User/setUserInfo', '/Hospital/addUserContacts'] // 为了检查有无数据
     }
     checkCodeMap(code, data, url) {
         if (this.codeMap[code] && code == '200') {
@@ -927,8 +927,8 @@ const strategy = {
             "advert_name":"广告名称",
             "is_detail_skip":"0",
             "cover_img": "https://f10.baidu.com/it/u=690824487,874247919&fm=173&app=25&f=JPEG?w=640&h=600&s=61512B66DA2AA65752C0A49303004089&access=215967316",
-            "is_allow_save_contacts":"是否允许用户留存信息",
-            "advert_detail":"广告详情"
+            "advert_detail":"<div><p>哈哈哈</p><img src=\"https://f10.baidu.com/it/u=690824487,874247919&fm=173&app=25&f=JPEG?w=640&h=600&s=61512B66DA2AA65752C0A49303004089&access=215967316\" /></div>",
+            "is_allow_save_contacts":"1"
         }
     },
     '/Order/addOutpatientOrder': {

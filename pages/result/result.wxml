@@ -15,7 +15,7 @@
             <view class="bottom-ad-img">
                 <image src="{{cover_img}}" mode="widthFix"></image>
             </view>
-            <view class="bottom-detail" wx:if="is_detail_skip">查看详情</view>
+            <view class="bottom-detail" wx:if="is_detail_skip" bindtap="goToAd">查看详情</view>
         </view>
     </view>
 </view>

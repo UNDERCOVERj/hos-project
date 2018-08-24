@@ -113,5 +113,10 @@ Page({
 		} else { // 支付结果，不需要显示loading
 			
 		}
+	},
+	goToAd() {
+		wx.redirectTo({
+			url: '/pages/advertisement/advertisement'
+		})
 	}
 })

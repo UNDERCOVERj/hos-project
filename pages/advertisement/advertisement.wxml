@@ -1,3 +1,6 @@
 <!--pages/advertisement/advertisement.wxml-->
 <import src="../wxParse/wxParse.wxml"/>
-<template is="wxParse" data="{{wxParseData:article.nodes}}"/>
+<view>
+    留下电话
+    <template is="wxParse" data="{{wxParseData:ad_detail.nodes}}"/>
+</view>
