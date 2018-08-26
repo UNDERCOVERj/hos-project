@@ -5,7 +5,7 @@
         <image wx:else src="../../assets/fail_top.png"></image>
     </view>
     <view class="content">
-        <view wx:if="resultMsg" class="result-msg">{{resultMsg}}</view>
+        <view wx:if="resultMsg" class="result-msg" style="color: {{status == 1 ? '#2e82ff' : '#ff6d00'}}">{{resultMsg}}</view>
         <view wx:if="additionalMsg" class="additional-msg">{{additionalMsg}}</view>
     </view>
     <view class="bottom">

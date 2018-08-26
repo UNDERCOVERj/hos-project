@@ -41,6 +41,10 @@
     border-radius: 60rpx;
 }
 
+.additional-msg {
+    color: #999999;
+    font-size: 24rpx;
+}
 /* .result-msg {
     color: #2e82ff;
 } */
