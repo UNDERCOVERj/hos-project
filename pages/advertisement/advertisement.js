@@ -25,7 +25,7 @@ Page({
 					id: advert_id
 				} = resData;
 
-				WxParse.wxParse('ad_detail', 'html', advert_detail, this);
+				WxParse.wxParse('ad_detail', 'html', advert_detail, this, 20);
 				this.setData({
 					is_allow_save_contacts: is_allow_save_contacts == 1 ? true : false,
 					advert_id
@@ -33,53 +33,45 @@ Page({
 			}
 		})
 	},
-
-	/**
-	 * 生命周期函数--监听页面初次渲染完成
-	 */
-	onReady: function () {
-
+	inputName(e) {
+		let value = e.detail.value;
+		this.setData({
+			name: value && value.trim() || ''
+		})
 	},
-
-	/**
-	 * 生命周期函数--监听页面显示
-	 */
-	onShow: function () {
-
+	inputPhone(e) {
+		let value = e.detail.value;
+		this.setData({
+			phone: value && value.trim() || ''
+		})
 	},
+	submitAd() {
+		let {
+			name,
+			phone
+		} = this.data;
+		if (!(name && name.trim() || '') || !(phone && phone.trim() || '')) {
+			wx.showToast({
+				title: '输入信息不能为空',
+				icon: 'none',
+				duration: 1000
+			})
+		} else {
+			let data = {
+				name,
+				phone,
+				advert_id
+			}
+			WX.request({
+				url: '',
+				data,
+				success: () => {
 
-	/**
-	 * 生命周期函数--监听页面隐藏
-	 */
-	onHide: function () {
+				},
+				fail: () => {
 
-	},
-
-	/**
-	 * 生命周期函数--监听页面卸载
-	 */
-	onUnload: function () {
-
-	},
-
-	/**
-	 * 页面相关事件处理函数--监听用户下拉动作
-	 */
-	onPullDownRefresh: function () {
-
-	},
-
-	/**
-	 * 页面上拉触底事件的处理函数
-	 */
-	onReachBottom: function () {
-
-	},
-
-	/**
-	 * 用户点击右上角分享
-	 */
-	onShareAppMessage: function () {
-
+				}
+			})
+		}
 	}
 })

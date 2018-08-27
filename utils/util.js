@@ -927,7 +927,7 @@ const strategy = {
             "advert_name":"广告名称",
             "is_detail_skip":"0",
             "cover_img": "https://f10.baidu.com/it/u=690824487,874247919&fm=173&app=25&f=JPEG?w=640&h=600&s=61512B66DA2AA65752C0A49303004089&access=215967316",
-            "advert_detail":"<div><p>哈哈哈</p><img src=\"https://f10.baidu.com/it/u=690824487,874247919&fm=173&app=25&f=JPEG?w=640&h=600&s=61512B66DA2AA65752C0A49303004089&access=215967316\" /></div>",
+            "advert_detail":"<div><h2>我我我</h2><p>哈哈哈</p><img src=\"https://f10.baidu.com/it/u=690824487,874247919&fm=173&app=25&f=JPEG?w=640&h=600&s=61512B66DA2AA65752C0A49303004089&access=215967316\" /></div>",
             "is_allow_save_contacts":"1"
         }
     },

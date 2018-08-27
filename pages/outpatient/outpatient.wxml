@@ -16,8 +16,8 @@
 		<view class="outpatient-content card" wx:for="{{cards}}" wx:for-index="cardidx" wx:for-item="card" wx:key="{{card.billId}}">
 				<view class="list">
 					<view class="list-title">
-						<label>
-							<checkbox value="{{cardidx}}" checked="{{card.checked}}" disabled="{{!canSelect}}" />
+						<label for="billId">
+							<checkbox id="billId" value="{{cardidx}}" checked="{{card.checked}}" disabled="{{!canSelect}}" />
 							<view>单据号：{{card.billId}}</view>
 						</label>
 						<view class="list-title-time">

@@ -63,7 +63,7 @@
 	<view class="inhospital-footer">
 		<view class="inhospital-footer-input">
 			<text>￥</text>
-			<input placeholder="请输入缴费金额" type="digit" bindinput="changeTotalAmount" />
+			<input placeholder="请输入缴费金额" type="digit" bindinput="changeTotalAmount" cursor-spacing="5"/>
 		</view>
 		<view class="inhospital-footer-btn" style="background-color: {{canPay ? '#2e82ff' : '#cccccc'}}" bindtap="handlePayment">支付</view>
 	</view>

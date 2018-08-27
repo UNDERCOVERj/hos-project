@@ -1,11 +1,11 @@
 {
   "pages": [
     "pages/home/home",
+    "pages/advertisement/advertisement",
     "pages/outpatient/outpatient",
     "pages/inhospital/inhospital",
     "pages/result/result",
-    "pages/history/history",
-    "pages/advertisement/advertisement"
+    "pages/history/history"
   ],
   "window": {
     "backgroundTextStyle": "light",

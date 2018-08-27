@@ -1,6 +1,17 @@
 <!--pages/advertisement/advertisement.wxml-->
 <import src="../wxParse/wxParse.wxml"/>
-<view>
+<view class="ad-detail">
     留下电话
-    <template is="wxParse" data="{{wxParseData:ad_detail.nodes}}"/>
+    <view class="ad-detail-content">    
+        <template is="wxParse" data="{{wxParseData:ad_detail.nodes}}"/>
+    </view>
+    <view class="ad-detail-info">
+        <view class="ad-detail-wrapper">
+            <input class="ad-detail-wrapper-input" placeholder="请输入您的姓名" bindinput="inputName"/>
+            <input class="ad-detail-wrapper-input" placeholder="请输入您的电话" bindinput="inputPhone"/>
+            <view class='ad-detail-button' bindtap="submitAd">
+                <text>提交</text>
+            </view>
+        </view>
+    </view>
 </view>
