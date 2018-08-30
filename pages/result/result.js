@@ -50,10 +50,11 @@ Page({
 							url: `/pages/outpatient/outpatient?mzNo=${mzNo}`
 						})
 					},
-					fail: (resultMsg) => {
+					fail: (additionalMsg) => {
 						this.setData({
 							status: 0,
-							resultMsg: '扫码失败'
+							resultMsg: '扫码失败',
+							additionalMsg
 						})
 					}
 				})
@@ -69,10 +70,11 @@ Page({
 							url: `/pages/inhospital/inhospital?zyNo=${zyNo}&zyTimes=${zyTimes}`
 						})
 					},
-					fail: (resultMsg) => {
+					fail: (additionalMsg) => {
 						this.setData({
 							status: 0,
-							resultMsg: '扫码失败'
+							resultMsg: '扫码失败',
+							additionalMsg
 						})
 					}
 				})

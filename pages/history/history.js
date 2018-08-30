@@ -350,11 +350,11 @@ Page({
             curPrice
         } = inhospitalBills[curPickerView]
         let cloneCards = JSON.parse(JSON.stringify(inhospitalBills));
-        cloneCards[0].card = this.getCard(chargeTime[curPrice], costList);
+        cloneCards[curPickerView].card = this.getCard(chargeTime[curPrice], costList);
         this.setData({
-            inhospitalBills: cloneCards
+            ["inhospitalBills[" + curPickerView + "].card"]: this.getCard(chargeTime[curPrice], costList)
         }, () => {
-            this.selectComponent('#table')._ready(); // 光setData不足以影响子组件,需要调用子组件方法
+            this.selectComponent('#table' + curPickerView)._ready(); // 光setData不足以影响子组件,需要调用子组件方法
             this.setData({
                 pickerViewHiddenFlag: true
             })
@@ -368,8 +368,8 @@ Page({
                 url: '/Order/getOutpatientOrderList',
                 data: {
                     mini_open_id: wx.getStorageSync('mini_open_id'),
-                    page_size: 100,
-                    page_num: 1
+                    page_size: 1000,
+                    page_num: "1"
                 },
                 success: (resData) => {
                     let list = resData.list;
@@ -414,8 +414,8 @@ Page({
                 url: '/Order/getInpatientOrderList',
                 data: {
                     mini_open_id: wx.getStorageSync('mini_open_id'),
-                    page_size: 100,
-                    page_num: 1
+                    page_size: 1000,
+                    page_num: "1"
                 },
                 success: (resData) => {
                     let list = resData.list;
@@ -425,11 +425,12 @@ Page({
                             inpatient_number,
                             order_number,
                             pay_money,
-                            pay_time_date
+                            pay_time_date,
+                            patient_name
                         } = item;
                         return {
                             inhospitalId: inpatient_number,
-                            name: 'xxxx',
+                            name: patient_name,
                             orderId: order_number,
                             expense: pay_money,
                             time: pay_time_date
@@ -463,12 +464,13 @@ Page({
         } = this.data;
         let keys = inhospitalIds.map((item, idx) => {
             let data = {
-                zyNo: item.serial_number,
+                zyNo: item.inpatient_number,
                 zyTimes: item.serial_number_list[item.curInhospitalIndex]
             };
             return new Promise((resolve, reject) => {
                 WX.request({
-                    url: '/ThirdParty/getInpatientCostList' + idx,
+                    // url: '/ThirdParty/getInpatientCostList' + idx,
+                    url: '/ThirdParty/getInpatientCostList',
                     data,
                     success: (resData) => {
                         resolve(resData);
@@ -490,6 +492,16 @@ Page({
                     } = resData;
                     // 改变 chargeTimeArr： time：price
 
+                    // 将key改成ms
+                    let transChargeTimeArr = {};
+                    let transCostList = {};
+                    for (let key in chargeTimeArr) {
+                        transChargeTimeArr[+key * 1000] = chargeTimeArr[key];
+                        transCostList[+key * 1000] = costList[key];
+                    }
+                    chargeTimeArr = transChargeTimeArr;
+                    costList = transCostList;
+
                     // 初次选择了的日期
                     let tempChargeTimeArr = Object.keys(chargeTimeArr);
                     tempChargeTimeArr.sort((prev, now) => +prev > +now);
@@ -501,10 +513,11 @@ Page({
                                     + initialPriceDate.getDate();
 
                     let chargeTimes = {}; // 对应时间戳的各个分类的总价
-                    Object.keys(chargeTimeArr).forEach(time => {
+                    // Object.keys(tempChargeTimeArr).forEach(time => {
+                    tempChargeTimeArr.forEach(time => {
                         let total = 0;
                         Object.keys(costList[time]).forEach(item => {
-                            total += +costList[time][item].category_total_cost;
+                            total = WX.add(total, +costList[time][item].category_total_cost);
                         })
                         chargeTimes[time] = total;
                     })
@@ -532,11 +545,12 @@ Page({
                         totalExpense: total_cost,
                         costList,
                         priceInfo: this.getPriceInfo(chargeTimes) || [],
-                        card: this.getCard(Object.keys(chargeTimeArr)[0], costList)
+                        // card: this.getCard(Object.keys(tempChargeTimeArr)[0], costList)
+                        card: this.getCard(tempChargeTimeArr[tempChargeTimeArr.length - 1], costList)
                     }
                     inhospitalBills.push(inhospitalBill)
                 })
-                this.setData({inhospitalBills, costList: inhospitalBills[0].card})
+                this.setData({inhospitalBills, costList: inhospitalBills.length && inhospitalBills[0].card || []})
             })
             .catch((err) => {
                 console.log(err)
@@ -549,9 +563,10 @@ Page({
             inhospitalIds
         } = this.data
         WX.request({
-            url: '/ThirdParty/getInpatientCostList' + (inhospitalIds[curPickerView].serial_number_list[inhospitalId[0]] - 1),
+            // url: '/ThirdParty/getInpatientCostList' + (inhospitalIds[curPickerView].serial_number_list[inhospitalId[0]] - 1),
+            url: '/ThirdParty/getInpatientCostList',
             data: {
-                zyNo: inhospitalIds[curPickerView].serial_number, // error
+                zyNo: inhospitalIds[curPickerView].inpatient_number, // error
                 zyTimes: inhospitalIds[curPickerView].serial_number_list[inhospitalId[0]]
             },
             success: (resData) => {
@@ -561,6 +576,15 @@ Page({
                     costList
                 } = resData;
                 // 改变 chargeTimeArr： time：price
+
+                let transChargeTimeArr = {};
+                let transCostList = {};
+                for (let key in chargeTimeArr) {
+                    transChargeTimeArr[+key * 1000] = chargeTimeArr[key];
+                    transCostList[+key * 1000] = costList[key];
+                }
+                chargeTimeArr = transChargeTimeArr;
+                costList = transCostList;
 
                 // 初次选择了的日期
                 let tempChargeTimeArr = Object.keys(chargeTimeArr);
@@ -573,10 +597,12 @@ Page({
                                 + initialPriceDate.getDate();
 
                 let chargeTimes = {}; // 对应时间戳的各个分类的总价
-                Object.keys(chargeTimeArr).forEach(time => {
+                // Object.keys(tempChargeTimeArr).forEach(time => {
+                tempChargeTimeArr.forEach(time => {
                     let total = 0;
                     Object.keys(costList[time]).forEach(item => {
-                        total += +costList[time][item].category_total_cost;
+                        // total += +costList[time][item].category_total_cost;
+                        total = WX.add(total, +costList[time][item].category_total_cost);
                     })
                     chargeTimes[time] = total;
                 })
@@ -606,19 +632,19 @@ Page({
                     totalExpense: total_cost,
                     costList,
                     priceInfo: this.getPriceInfo(chargeTimes) || [],
-                    card: this.getCard(Object.keys(chargeTimeArr)[0], costList)
+                    // card: this.getCard(Object.keys(tempChargeTimeArr)[0], costList)
+                    card: this.getCard(tempChargeTimeArr[tempChargeTimeArr.length - 1], costList)
                 }
                 this.setData({
                     ["inhospitalBills[" + curPickerView + "]"]: inhospitalBill
                 }, () =>  {
-                    this.selectComponent('#table')._ready()
+                    this.selectComponent('#table' + curPickerView)._ready()
                 })
             }
         })
     },
     // 住院费用清单，时间改变，改变costList
     getCard (time, costList) { // 时间戳
-        console.log(costList)
         let cards = costList[time];
         let returnCard = {};
         Object.keys(cards).forEach(_class => {

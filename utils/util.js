@@ -1,5 +1,5 @@
 const app = getApp();
-const prefixUrl = 'https://backend.wsyzyyjfzs.com';
+const prefixUrl = 'https://api.wsyzyyjfzs.com';
 
 const formatTime = date => {
 	const year = date.getFullYear()
@@ -59,14 +59,19 @@ class CodeMap {
             // 订单
             '7000': '页码非法'
         }
-        this.whiteList = ['/User/setUserInfo', '/Hospital/addUserContacts'] // 为了检查有无数据
+        this.whiteList = [
+            '/Wx/setUserInfo',
+            '/Order/getOutpatientOrderList',
+            '/Order/getInpatientOrderList',
+            '/Order/getInpatientNoAndTimeList',
+            '/ThirdParty/getInpatientCostList'
+        ]
     }
     checkCodeMap(code, data, url) {
         if (this.codeMap[code] && code == '200') {
-            if (!data 
-                || (Array.isArray(data) && !data.length) 
-                || (this.whiteList.indexOf(url) < 0 && typeof data == 'object' && !Object.keys(data).length)) {
-
+            if (!data
+                // || (this.whiteList.indexOf(url) < 0 && typeof data == 'object' && !Object.keys(data).length)) {
+                ){
                 return {
                     msg: '数据为空',
                     error_no: 1
@@ -975,50 +980,51 @@ class Request extends CodeMap{
             mask: true
         })
         return new Promise((resolve, reject) => {
-            // try {
-                setTimeout(() => this.request(url, resolve, reject), 500)
-                // const requestTask = wx.request({
-                //     url: `${prefixUrl}${url}`,
-                //     header: {
-                //         'content-type': 'application/json'
-                //     },
-                //     data: {
-                //         ...data, 
-                //         hospita_unique_id: app.globalData.hospitalId
-                //     },
-                //     method: 'POST',
-                //     success: (res) => {
-                //         let {
-                //             statusCode
-                //         }
-                //         if (statusCode != 200) {
-                //             reject(statusCode);
-                //             return;
-                //         }
-                //         let {
-                //             data,
-                //             code
-                //         } = res.data;
-                //         let {
-                //             msg,
-                //             error_no // 1 错 0 继续
-                //         } = this.checkCodeMap(code, data);
-                //         let resData = {
-                //             data,
-                //             code
-                //         }
-                //         if (!error_no) {
-                //             resolve(resData)
-                //         } else {
-                //             reject(msg);
-                //         }
-                //     },
-                //     fail: (err) => reject(err)
-                // })
+            try {
+                // setTimeout(() => this.request(url, resolve, reject), 500)
+                const requestTask = wx.request({
+                    url: `${prefixUrl}${url}`,
+                    header: {
+                        'content-type': 'application/x-www-form-urlencoded'
+                    },
+                    data: {
+                        ...data, 
+                        hospita_unique_id: app.globalData.hospitalId
+                    },
+                    method: 'POST',
+                    success: (res) => {
+                        let {
+                            statusCode
+                        } = res;
+                        if (statusCode != 200) {
+                            reject(statusCode);
+                            return;
+                        }
+                        let {
+                            data,
+                            code,
+                            message
+                        } = res.data;
+                        let {
+                            msg,
+                            error_no // 1 错 0 继续
+                        } = this.checkCodeMap(code, data, url);
+                        let resData = {
+                            data,
+                            code
+                        }
+                        if (!error_no) {
+                            resolve(resData)
+                        } else {
+                            reject(message);
+                        }
+                    },
+                    fail: (err) => reject(err)
+                })
                 // setTimeout(() => {requestTask.abort()}, 1000)
-            // } catch (e) {
-            //     reject('请求错误')
-            // }
+            } catch (e) {
+                reject('请求错误')
+            }
             
         })
         .then((resData) => {
@@ -1029,7 +1035,7 @@ class Request extends CodeMap{
         .catch((err = '') => {
             let msg = typeof err == 'object' ? err.errMsg : err;
             wx.showToast({
-                title: msg,
+                title: msg + '',
                 icon: 'loading',
                 duration: 1000
             })

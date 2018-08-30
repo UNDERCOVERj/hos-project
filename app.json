@@ -10,8 +10,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "五四一医院缴费助手",
+    "navigationBarTitleText": "TEST医院2",
     "navigationBarTextStyle": "black"
-  },
-  "debug": true
+  }
 }

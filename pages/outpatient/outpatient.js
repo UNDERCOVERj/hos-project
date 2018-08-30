@@ -61,6 +61,9 @@ Page({
                     is_allow_single_pay
                 } = resData;
                 WX.request({
+                    data: {
+                        mzNo
+                    },
                     url: '/ThirdParty/getOutpatientWaitPayList',
                     success: (resData) => {
                         

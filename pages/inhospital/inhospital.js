@@ -11,15 +11,15 @@ Page({
     data: {
         // info: {
             hospital: app.globalData.hospitalName, // 医院名
-            name: '乐俊杰',// 姓名
-            inhospitalId: 1234,// 住院号
-            number: 2,// 次数
-            time: new Date().toLocaleString(),// 住院时间
-            department: '皮肤科',// 科室
-            bedId: 34,// 床位号
-            prepayPrice: 1200,// 预交金额
-            expense: 3000,// 已产生费用
-            balance: 2444,// 余额
+            name: '',// 姓名
+            inhospitalId: '',// 住院号
+            number: '',// 次数
+            time: '',// 住院时间
+            department: '',// 科室
+            bedId: '',// 床位号
+            prepayPrice: '',// 预交金额
+            expense: '',// 已产生费用
+            balance: '',// 余额
         // },
         totalAmount: 0,
         canPay: false
@@ -35,6 +35,10 @@ Page({
         } = options;
 
         WX.request({
+            data: {
+                zyNo,
+                zyTimes
+            },
             url: '/ThirdParty/getInpatientWaitPayList',
             success: (resData) => {
                 let {
@@ -58,7 +62,9 @@ Page({
                     bedId,
                     prepayPrice,
                     expense,
-                    balance
+                    balance,
+                    zyNo,
+                    zyTimes
                 })
             }
         })
@@ -67,7 +73,8 @@ Page({
     // 输入金额
     changeTotalAmount (e) {
         let value = e.detail.value;
-        let canPayReg = /(^[1-9]([0-9]+)?(\.[0-9]*)?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+        let canPayReg = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
+        // /(^([1-9][0-9]*)$)|(^([0]\.\d?|[1-9][0-9]*\.\d?)[1-9]$)/ 这个就不可以以0结束
         this.setData({
             totalAmount: value,
             canPay: canPayReg.test(value)
@@ -82,49 +89,49 @@ Page({
             totalAmount
         } = this.data;
         if (canPay) {
-            wx.navigateTo({
-                url: `/pages/result/result?type=1&status=1&resultMsg=支付成功`
-            })
-            // let data = {
-            //     inpatient_number: zyNo,
-            //     serial_number: zyTimes,
-            //     mini_open_id: wx.getStorageSync('mini_open_id'),
-            //     pay_money: totalAmount
-            // }
-            // WX.request({
-            //     url: '/Order/addInpatientOrder',
-            //     data,
-            //     success: (resData) => {
-            //         let {
-            //             timeStamp,
-            //             nonceStr,
-            //             package: _package,
-            //             signType,
-            //             paySign 
-            //         } = resData;
-            //         wx.requestPayment({
-            //             timeStamp,
-            //             nonceStr,
-            //             package: _package,
-            //             signType,
-            //             paySign,
-            //             success: () => {
-            //                 wx.showToast({
-            //                     title: '支付成功',
-            //                     icon: 'success',
-            //                     duration: 1000,
-            //                     complete: () => {
-            //                         wx.navigateTo({
-            //                             url: `/pages/result/result?type=1&status=1&resultMsg=支付成功`
-            //                         })
-            //                     }
-            //                 })
-            //             },
-            //             fail: this.failHandeler
-            //         })
-            //     },
-            //     fail: this.failHandeler
+            // wx.navigateTo({
+            //     url: `/pages/result/result?type=1&status=1&resultMsg=支付成功`
             // })
+            let data = {
+                inpatient_number: zyNo,
+                serial_number: zyTimes,
+                mini_open_id: wx.getStorageSync('mini_open_id'),
+                pay_money: totalAmount
+            }
+            WX.request({
+                url: '/Order/addInpatientOrder',
+                data,
+                success: (resData) => {
+                    let {
+                        timeStamp,
+                        nonceStr,
+                        package: _package,
+                        signType,
+                        paySign 
+                    } = resData;
+                    wx.requestPayment({
+                        timeStamp,
+                        nonceStr,
+                        package: _package,
+                        signType,
+                        paySign,
+                        success: () => {
+                            wx.showToast({
+                                title: '支付成功',
+                                icon: 'success',
+                                duration: 1000,
+                                complete: () => {
+                                    wx.navigateTo({
+                                        url: `/pages/result/result?type=1&status=1&resultMsg=支付成功`
+                                    })
+                                }
+                            })
+                        },
+                        fail: this.failHandeler
+                    })
+                },
+                fail: this.failHandeler
+            })
         } else {
             wx.navigateTo({
                 url: `/pages/result/result?type=1&status=0&resultMsg=支付失败`

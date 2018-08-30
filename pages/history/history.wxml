@@ -72,7 +72,7 @@
 				<view class="card-info-tr">
 					<view class="card-info-key">住院号</view>
 					<view class="card-info-value" bindtap="showInhospitalModal">
-						<text data-idx="{{idx}}">{{inhospitalIds[idx].serial_number}}</text>
+						<text data-idx="{{idx}}">ZY{{inhospitalIds[idx].inpatient_number}}</text>
 						<text data-idx="{{idx}}">第{{inhospitalIds[idx]['serial_number_list'][inhospitalIds[idx]['curInhospitalIndex']]}}次</text>
 					</view>
 				</view>
@@ -99,7 +99,7 @@
 							{{item.priceDate}}<view class="list-title-billId-icon"  data-curPickerView="{{idx}}"></view>
 						</view>
 					</view>
-					<component-table id="table" type="inhospitalBills" card="{{item.card}}" cardidx="{{idx}}" bindcustumevent="unfoldTable" classification="1"></component-table>
+					<component-table id="{{'table' + idx}}" type="inhospitalBills" card="{{item.card}}" cardidx="{{idx}}" bindcustumevent="unfoldTable" classification="1"></component-table>
 				</view>	
 			</view>			
 		</view>
@@ -121,7 +121,7 @@
 					<picker-view-column>
 						<view wx:for="{{inhospitalBills[curPickerView].days}}" wx:for-index="dayidx" wx:key="{{dayidx}}" class="picker-view-column">{{item}}日</view>
 					</picker-view-column>
-					<picker-view-column>
+					<picker-view-column style="flex-basis: 30%">
 						<view wx:for="{{inhospitalBills[curPickerView].prices}}" wx:key="{{priceidx}}" wx:for-index="priceidx" class="picker-view-column picker-view-column-highlight">￥{{item}}</view>
 					</picker-view-column>		
 				</picker-view>

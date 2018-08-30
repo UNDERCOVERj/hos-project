@@ -94,7 +94,6 @@ Page({
     invokeGetUserInfo () {
         this.getUserInfo((userInfo) => {
             this.setData({
-                hidden: true,
                 userInfo: userInfo || {}
             }, this.getMiniOpenId)
         }, () => {
@@ -115,13 +114,20 @@ Page({
                     if (res.code) {
                         //发起网络请求
                         WX.request.call(this, {
-                            url: '/User/getUserOpenid',
+                            url: '/Wx/getUserOpenid',
                             data: {
                                 jscode: res.code
                             },
                             success: (data) => { // 获得openid后，设置用户信息
                                 wx.setStorageSync('mini_open_id', data.openid);
                                 this.setUserInfo()
+                            },
+                            fail: () => {
+                                wx.showToast({
+                                    title: '登录失败',
+                                    icon: 'none',
+                                    duration: 1000
+                                })
                             }
                         });
                     } else {
@@ -145,7 +151,7 @@ Page({
             gender
         } = this.data.userInfo;
         WX.request.call(this, {
-            url: '/User/setUserInfo',
+            url: '/Wx/setUserInfo',
             data: {
                 user_name: nickName,
                 head_img: avatarUrl,
@@ -153,6 +159,9 @@ Page({
                 mini_open_id
             },
             success: () => {
+                this.setData({
+                    hidden: true
+                })
                 wx.showToast({
                     title: '登录成功',
                     icon: 'success',
@@ -196,6 +205,7 @@ Page({
                     let resStr = res.result;
                     let resStrArr = resStr.split('&');
                     let hospitalId = resStr && resStrArr[0];
+                    console.log(resStr)
                     // 条件1：医院id一样
                     if (hospitalId != app.globalData.hospitalId) {
                         wx.navigateTo({
@@ -207,11 +217,11 @@ Page({
                         })
                     } else if (resStr.indexOf('MZ') > -1) { // 条件1和条件2都满足
                         wx.navigateTo({
-                            url: `/pages/result/result?type=0&status=1&mzNo=${resStrArr[1]}`
+                            url: `/pages/result/result?type=0&status=1&mzNo=${resStrArr[1].slice(2)}`
                         })
                     } else if (resStr.indexOf('ZY') > -1) { // 条件1和条件2都满足
                         wx.navigateTo({
-                            url: `/pages/result/result?type=0&status=1&zyNo=${resStrArr[1]}&zyTimes=${resStrArr[2]}`
+                            url: `/pages/result/result?type=0&status=1&zyNo=${resStrArr[1].slice(2)}&zyTimes=${resStrArr[2]}`
                         })
                     } else {
                     }
@@ -220,7 +230,7 @@ Page({
                 fail: (res) => {
                     if (res.errMsg !== 'scanCode:fail cancel') {
                         wx.navigateTo({
-                            url: `/pages/result/result?type=0&status=0&resultMsg=扫描失败`
+                            url: `/pages/result/result?type=0&status=0&resultMsg=扫描失败&additionalMsg=二维码无效`
                         })
                     }
                 }
