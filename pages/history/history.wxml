@@ -55,7 +55,7 @@
 			</view>
 			<view class="card-info-tr">
 				<view class="card-info-key">缴费金额</view>
-				<view class="card-info-value">{{info.expense}}</view>
+				<view class="card-info-value">￥{{info.expense}}</view>
 			</view>
 			<view class="card-info-tr">
 				<view class="card-info-key">缴费时间</view>

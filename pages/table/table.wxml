@@ -13,7 +13,7 @@
 				<view class="table-td table-column-project">{{listItem.project}}</view>
 				<view class="table-td table-column-price">￥{{listItem.price}}</view>
 				<view class="table-td table-column-quantity">{{listItem.quantity}}</view>
-				<view class="table-td table-column-amount table-td-amount">{{listItem.amount}}</view>
+				<view class="table-td table-column-amount table-td-amount">￥{{listItem.amount}}</view>
 			</view>
 		</view>
 		<view class="list-footer">

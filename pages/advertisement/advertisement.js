@@ -8,27 +8,41 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
-
+		cover_img: '',
+		advert_id: '',
+		is_allow_save_contacts: false
 	},
 
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
+	unescapeHTML(a){
+		a = "" + a;
+		return a.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+	},
+	decodeUnicode(str) {
+		str = str.replace(/\\/g, "%");
+		return this.postStr(unescape(str));
+	},
+	postStr(str) {
+		return str.replace(/\%/g, "");
+	},
 	onLoad: function (options) {
-
 		WX.request({
 			url: '/Hospital/getOpenAdvert',
 			success: (resData) => {
 				let {
 					is_allow_save_contacts,
 					advert_detail,
+					cover_img,
 					id: advert_id
 				} = resData;
-
+				advert_detail = this.unescapeHTML(this.decodeUnicode(advert_detail.slice(1, -1)));
 				WxParse.wxParse('ad_detail', 'html', advert_detail, this, 20);
 				this.setData({
 					is_allow_save_contacts: is_allow_save_contacts == 1 ? true : false,
-					advert_id
+					advert_id,
+					cover_img
 				})
 			}
 		})
@@ -48,7 +62,8 @@ Page({
 	submitAd() {
 		let {
 			name,
-			phone
+			phone,
+			advert_id
 		} = this.data;
 		if (!(name && name.trim() || '') || !(phone && phone.trim() || '')) {
 			wx.showToast({
@@ -63,13 +78,26 @@ Page({
 				advert_id
 			}
 			WX.request({
-				url: '',
-				data,
+				url: '/Hospital/addUserContacts',
+				data: {
+					advert_id,
+					mini_open_id: wx.getStorageSync('mini_open_id'),
+					name,
+					phone
+				},
 				success: () => {
-
+					wx.showToast({
+						title: '提交成功',
+						icon: 'success',
+						duration: 1000
+					})
 				},
 				fail: () => {
-
+					wx.showToast({
+						title: '提交失败',
+						icon: 'success',
+						duration: 1000
+					})
 				}
 			})
 		}

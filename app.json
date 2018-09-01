@@ -2,9 +2,9 @@
   "pages": [
     "pages/home/home",
     "pages/advertisement/advertisement",
+    "pages/result/result",
     "pages/outpatient/outpatient",
     "pages/inhospital/inhospital",
-    "pages/result/result",
     "pages/history/history"
   ],
   "window": {

@@ -13,9 +13,9 @@
         <image src="../../assets/success_bottom.png" wx:elif="{{type==0 || type==1 && !adFlag}}"/>
         <view wx:elif="{{type==1 && adFlag}}" class="bottom-ad">
             <view class="bottom-ad-img">
-                <image src="{{cover_img}}" mode="widthFix"></image>
+                <image src="{{cover_img}}" mode="aspectFit"></image>
             </view>
-            <view class="bottom-detail" wx:if="is_detail_skip" bindtap="goToAd">查看详情</view>
+            <view class="bottom-detail" wx:if="{{is_detail_skip}}" bindtap="goToAd">查看详情</view>
         </view>
     </view>
 </view>

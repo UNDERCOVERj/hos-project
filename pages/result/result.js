@@ -14,7 +14,7 @@ Page({
 		zyNo: '',
 		mzNo: '',
 		adFlag: false,
-		is_detail_skip: true // 是否查看详情
+		is_detail_skip: false // 是否查看详情
 	},
 
 	/**

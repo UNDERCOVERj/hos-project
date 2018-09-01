@@ -1,8 +1,8 @@
 <!--pages/advertisement/advertisement.wxml-->
 <import src="../wxParse/wxParse.wxml"/>
 <view class="ad-detail">
-    留下电话
-    <view class="ad-detail-content">    
+    <view class="ad-detail-content"> 
+        <image mode="aspectFit" src="{{cover_img}}"></image>   
         <template is="wxParse" data="{{wxParseData:ad_detail.nodes}}"/>
     </view>
     <view class="ad-detail-info">

@@ -9,7 +9,7 @@
 .ad-detail-wrapper {
     padding: 10px;
     width:80%;
-	box-shadow: 5px 5px 5px #f5f5f5;
+    border: 1px solid #f5f5f5;
 	border-radius: 5px;
 }
 
