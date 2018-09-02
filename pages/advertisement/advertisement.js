@@ -1,6 +1,7 @@
 // pages/advertisement/advertisement.js
 var WxParse = require('../wxParse/wxParse.js');
 const WX = require('../../utils/util.js');
+const Utils = require('../../utils/unescape.js');
 
 Page({
 
@@ -11,14 +12,6 @@ Page({
 		cover_img: '',
 		advert_id: '',
 		is_allow_save_contacts: false
-	},
-
-	/**
-	 * 生命周期函数--监听页面加载
-	 */
-	unescapeHTML(a){
-		a = "" + a;
-		return a.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;/g, "'");
 	},
 	decodeUnicode(str) {
 		str = str.replace(/\\/g, "%");
@@ -37,7 +30,8 @@ Page({
 					cover_img,
 					id: advert_id
 				} = resData;
-				advert_detail = this.unescapeHTML(this.decodeUnicode(advert_detail.slice(1, -1)));
+				advert_detail = Utils.unescape(Utils.deleteQuot(this.decodeUnicode(advert_detail)))
+
 				WxParse.wxParse('ad_detail', 'html', advert_detail, this, 20);
 				this.setData({
 					is_allow_save_contacts: is_allow_save_contacts == 1 ? true : false,
