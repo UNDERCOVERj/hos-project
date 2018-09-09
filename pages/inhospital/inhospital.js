@@ -46,13 +46,22 @@ Page({
                     brxm: name,
                     zyh: inhospitalId,
                     zycs: number,
-                    rysj: time,
+                    rysj_time: time,
                     dqks: department,
                     dqch: bedId,
                     yjje: prepayPrice,
-                    ycsfy: expense,
-                    zhye: balance
+                    zhye: expense,
+                    wjfy: balance
                 } = resData;
+                time = (() => {
+                    let date = new Date(+time*1000);
+                    let year = date.getFullYear() + '';
+                    let month = (date.getMonth() + 1) + '';
+                    let day = date.getDate() + '';
+                    month = ('00' + month).slice(month.length);
+                    day = ('00' + day).slice(day.length);
+                    return year + '-' + month + '-' + day;
+                })()
                 this.setData({
                     name,
                     inhospitalId,

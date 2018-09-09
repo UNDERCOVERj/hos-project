@@ -47,14 +47,14 @@
 			<view class="card-info-tr">
 				<view class="card-info-key">
 					<view class="card-dot card-dot-gray"></view>
-					<text>已产生费用</text>
+					<text>账户余额</text>
 				</view>
 				<view class="card-info-value">{{expense}}</view>
 			</view>
 			<view class="card-info-tr">
 				<view class="card-info-key">
 					<view class="card-dot card-dot-orange"></view>
-					<text>账户余额</text>
+					<text>未结费用</text>
 				</view>
 				<view class="card-info-value">{{balance}}</view>
 			</view>

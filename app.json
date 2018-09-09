@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/advertisement/advertisement",
     "pages/home/home",
+    "pages/advertisement/advertisement",
     "pages/result/result",
     "pages/outpatient/outpatient",
     "pages/inhospital/inhospital",
@@ -10,7 +10,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "TEST医院2",
+    "navigationBarTitleText": "五四一总医院缴费助手",
     "navigationBarTextStyle": "black"
   }
 }

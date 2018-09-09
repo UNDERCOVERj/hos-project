@@ -379,11 +379,13 @@ Page({
                             outpatient_number,
                             bill_number,
                             real_money,
+                            patient_name,
                             project_list
                         } = listItem;
                         let item = {
                             outpatientId: outpatient_number,
                             billId: bill_number,
+                            patient_name,
                             totalExpense: real_money,
                             list: []
                         };

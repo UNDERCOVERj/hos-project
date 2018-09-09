@@ -5,7 +5,7 @@ App({
         
     },
     globalData: {
-        hospitalId: "TEST2",
-        hospitalName: "TEST医院2"
+        hospitalId: "WSYZYY",
+        hospitalName: "五四一总医院缴费助手"
     }
 })

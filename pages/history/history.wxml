@@ -32,6 +32,9 @@
 					<view class="list-title-billId">
 						单据号: {{card.billId}}
 					</view>
+					<view>
+						病人姓名: {{card.patient_name}}
+					</view>
 				</view>
 				<component-table type="outpatientBills" card="{{card}}" cardidx="{{cardidx}}" bindcustumevent="unfoldTable"></component-table>
 			</view>	

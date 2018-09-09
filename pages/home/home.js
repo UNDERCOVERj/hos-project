@@ -16,12 +16,11 @@ Page({
         notice: [],
         animationData: {}
     },
-
+    onShareAppMessage() {},
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
-        
 
         // 获取用户信息
         wx.getSetting({
@@ -205,7 +204,6 @@ Page({
                     let resStr = res.result;
                     let resStrArr = resStr.split('&');
                     let hospitalId = resStr && resStrArr[0];
-                    console.log(resStr)
                     // 条件1：医院id一样
                     if (hospitalId != app.globalData.hospitalId) {
                         wx.navigateTo({
@@ -283,6 +281,7 @@ Page({
             curPage,
             textSize
         } = data;
+        if (!notice.length) return;
         let text = notice[curPage].text;
         let textLen = text.length;
 

@@ -8,7 +8,7 @@
     <view class="ad-detail-info">
         <view class="ad-detail-wrapper">
             <input class="ad-detail-wrapper-input" placeholder="请输入您的姓名" bindinput="inputName"/>
-            <input class="ad-detail-wrapper-input" placeholder="请输入您的电话" bindinput="inputPhone"/>
+            <input class="ad-detail-wrapper-input" placeholder="请输入您的手机号" bindinput="inputPhone"/>
             <view class='ad-detail-button' bindtap="submitAd">
                 <text>提交</text>
             </view>

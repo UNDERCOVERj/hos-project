@@ -65,6 +65,12 @@ Page({
 				icon: 'none',
 				duration: 1000
 			})
+		} else if (!/^1[3456789]{1}\d{9}$/.test(phone.trim())) {
+			wx.showToast({
+				title: '手机号格式错误',
+				icon: 'none',
+				duration: 1000
+			})
 		} else {
 			let data = {
 				name,

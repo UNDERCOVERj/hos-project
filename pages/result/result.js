@@ -21,6 +21,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad: function (options) {
+		console.log(options)
 		let {
 			mzNo, // 扫码的返回结果, 门诊号
 			zyNo, // 扫码的返回结果, 住院号

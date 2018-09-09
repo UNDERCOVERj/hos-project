@@ -56,6 +56,13 @@
 
 .list-title-billId {
 	color: #2e82ff;
+	max-width: 12em;
+	overflow: hidden;
+	display:-webkit-box;
+	-webkit-box-orient:vertical;
+	-webkit-line-clamp:1;
+	word-break:break-all;
+	word-wrap:break-word;
 }
 .list-title-billId-icon {
 	width: 20rpx;

@@ -8,9 +8,9 @@ Page({
     */
     data: {
         canSelect: false, // 是否可选择性支付
-        name: '乐俊杰',// 姓名
-        outpatientId: 123456789,// 门诊号
-        totalExpense: 0, // 勾选的总共多少钱
+        name: '',// 姓名
+        outpatientId: '',// 门诊号
+        totalExpense: '', // 勾选的总共多少钱
         canPay: false, // 是否可以支付
         // cards: [
         //     {
