@@ -6,6 +6,6 @@ App({
     },
     globalData: {
         hospitalId: "WSYZYY",
-        hospitalName: "五四一总医院缴费助手"
+        hospitalName: "五四一总医院"
     }
 })
